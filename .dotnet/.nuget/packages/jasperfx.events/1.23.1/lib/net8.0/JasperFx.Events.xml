@@ -1,0 +1,3000 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>JasperFx.Events</name>
+    </assembly>
+    <members>
+        <member name="M:JasperFx.Events.Aggregation.AggregateApplication`2.CreateByData``1(``0,`1)">
+            <summary>
+            Test helper to start from event data
+            </summary>
+            <param name="eventData"></param>
+            <param name="session"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Aggregation.AggregateApplication`2.ApplyByDataAsync``1(`0,``0,`1)">
+            <summary>
+            Really just for testing purposes
+            </summary>
+            <param name="snapshot"></param>
+            <param name="data"></param>
+            <param name="session"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="T:JasperFx.Events.Aggregation.AggregateIdentityAttribute">
+            <summary>
+            Specify the identity type for a self-aggregating type when the source generator
+            cannot infer it from an Id property.
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.Aggregation.GeneratedEvolverAttribute">
+            <summary>
+            Assembly-level attribute emitted by the source generator to register a generated evolver
+            for a self-aggregating type.
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Aggregation.IAggregateProjection.NaturalKeyDefinition">
+            <summary>
+            The natural key definition for this aggregate, if one is configured via [NaturalKey] attribute.
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.Aggregation.IdentifiedBy`1">
+            <summary>
+            Marker interface to explicitly declare the identity type of an aggregate.
+            This is especially useful for aggregates that use strong typed identifiers
+            (e.g., Vogen value objects wrapping Guid/string) to enable automatic
+            identity inference in command handlers.
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.Aggregation.IGeneratedAsyncEvolver`2">
+            <summary>
+            Interface for source-generated evolvers that wrap a user's async Evolve/EvolveAsync
+            method on a self-aggregating type. Used when the aggregate defines its own
+            Evolve(IEvent) or EvolveAsync(IEvent, IQuerySession) method.
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.Aggregation.IGeneratedSyncDetermineAction`2">
+            <summary>
+            Interface for source-generated evolvers that handle all-sync conventional methods
+            with ShouldDelete. Used for self-aggregating types.
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.Aggregation.IGeneratedSyncEvolver`2">
+            <summary>
+            Interface for source-generated evolvers that handle all-sync conventional methods
+            without ShouldDelete. Used for self-aggregating types.
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.Aggregation.IIdentitySetter`2">
+            <summary>
+            Small strategy to set the identity of an entity
+            </summary>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TId"></typeparam>
+        </member>
+        <member name="M:JasperFx.Events.Aggregation.IIdentitySetter`2.SetIdentity(`0,`1)">
+            <summary>
+                Assign the given identity to the document
+            </summary>
+            <param name="document"></param>
+            <param name="identity"></param>
+        </member>
+        <member name="T:JasperFx.Events.Aggregation.IRefersToAggregate">
+            <summary>
+            Marker interface for attributes that refer to an aggregate type.
+            When applied to attributes on method parameters, the source generator
+            will discover and generate evolvers for the parameter's aggregate type,
+            ensuring Marten and Polecat can use source-generated projections
+            even without explicit Snapshot&lt;T&gt;() registration.
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Aggregation.JasperFxAggregationProjectionBase`4.ApplyMetadata(`0,JasperFx.Events.IEvent)">
+            <summary>
+                Template method that is called on the last event in a slice of events that
+                are updating an aggregate. This was added specifically to add metadata like "LastModifiedBy"
+                from the last event to an aggregate with user-defined logic. Override this for your own specific logic
+            </summary>
+            <param name="snapshot"></param>
+            <param name="lastEvent"></param>
+        </member>
+        <member name="M:JasperFx.Events.Aggregation.JasperFxAggregationProjectionBase`4.RaiseSideEffects(`2,JasperFx.Events.IEventSlice{`0})">
+            <summary>
+            Potentially raise "side effects" during projection processing to either emit additional events,
+            or publish messages
+            </summary>
+            <param name="operations"></param>
+            <param name="slice"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Aggregation.JasperFxAggregationProjectionBase`4.FilterIncomingEventsOnStreamType">
+            <summary>
+                When used as an asynchronous projection, this opts into
+                only taking in events from streams explicitly marked as being
+                the aggregate type for this projection. Only use this if you are explicitly
+                marking streams with the aggregate type on StartStream()
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Aggregation.JasperFxAggregationProjectionBase`4.EnrichEventsAsync(JasperFx.Events.Grouping.SliceGroup{`0,`1},`3,System.Threading.CancellationToken)">
+            <summary>
+            Hook that you can override in order to do "event enrichment" where you might batch up
+            database lookups to add information to events prior to applying them in a projection
+            running asynchronously. Note that this method is called *after* slicing, but before applying
+            events
+            </summary>
+            <param name="group"></param>
+            <param name="querySession"></param>
+            <param name="cancellation"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Aggregation.JasperFxAggregationProjectionBase`4.DetermineAction(`0,`1,System.Collections.Generic.IReadOnlyList{JasperFx.Events.IEvent})">
+             <summary>
+             Override this method to apply workflow mechanics to your aggregate with
+             a purely synchronous method that does not require any additional data
+             lookup.
+            
+             It is valid to override this method or ApplyAsync, but not both!
+             </summary>
+             <param name="snapshot"></param>
+             <param name="identity"></param>
+             <param name="events"></param>
+             <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Aggregation.JasperFxAggregationProjectionBase`4.DetermineActionAsync(`3,`0,`1,JasperFx.Events.Aggregation.IIdentitySetter{`0,`1},System.Collections.Generic.IReadOnlyList{JasperFx.Events.IEvent},System.Threading.CancellationToken)">
+            <summary>
+            Override this method if your projection requires complex workflow like deleting or "un-deleting" projected documents
+            *and* you require asynchronous data access code as part of the workflow. 
+            </summary>
+            <param name="session"></param>
+            <param name="snapshot"></param>
+            <param name="identity"></param>
+            <param name="identitySetter"></param>
+            <param name="events"></param>
+            <param name="cancellation"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Aggregation.JasperFxAggregationProjectionBase`4.EvolveAsync(`0,`1,`3,JasperFx.Events.IEvent,System.Threading.CancellationToken)">
+            <summary>
+            Override this method to write explicit logic for this aggregation to evolve or create a snapshot
+            based on a single event at a time.  
+            Returning <c>null</c> when the document previously existed will cause the document to be deleted.
+            </summary>
+            <param name="snapshot">The current snapshot, if it exists</param>
+            <param name="id">The aggregate identifier</param>
+            <param name="session">The current query session</param>
+            <param name="e">The event to apply</param>
+            <param name="cancellation">Cancellation token</param>
+            <returns>
+                The evolved snapshot, a new snapshot, or <c>null</c>.  
+                Returning <c>null</c> when the document previously existed deletes the document,  
+                returning <c>null</c> when no document existed does nothing.
+            </returns>
+        </member>
+        <member name="M:JasperFx.Events.Aggregation.JasperFxAggregationProjectionBase`4.Evolve(`0,`1,JasperFx.Events.IEvent)">
+            <summary>
+                Override this method to write explicit logic for this aggregation to evolve or create a snapshot
+                based on a single event at a time using only synchronous code.  
+                Returning <c>null</c> when the document previously existed will cause the document to be deleted.
+            </summary>
+            <param name="snapshot">The current snapshot, if it exists</param>
+            <param name="id">The aggregate identifier</param>
+            <param name="e">The event to apply</param>
+            <returns>
+                The evolved snapshot, a new snapshot, or <c>null</c>.  
+                Returning <c>null</c> when the document previously existed deletes the document,  
+                returning <c>null</c> when no document existed does nothing.
+            </returns>
+        </member>
+        <member name="M:JasperFx.Events.Aggregation.JasperFxMultiStreamProjectionBase`4.FanOut``2(System.Func{``0,System.Collections.Generic.IEnumerable{``1}},JasperFx.Events.Grouping.FanoutMode)">
+            <summary>
+                Apply "fan out" operations to the given TEvent type that inserts an enumerable of TChild events right behind the
+                parent
+                event in the event stream
+            </summary>
+            <param name="fanOutFunc"></param>
+            <param name="mode">Should the fan out operation happen after grouping, or before? Default is after</param>
+            <typeparam name="TEvent"></typeparam>
+            <typeparam name="TChild"></typeparam>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:JasperFx.Events.Aggregation.JasperFxMultiStreamProjectionBase`4.FanOut``2(System.Func{JasperFx.Events.IEvent{``0},System.Collections.Generic.IEnumerable{``1}},JasperFx.Events.Grouping.FanoutMode)" -->
+        <member name="M:JasperFx.Events.Aggregation.JasperFxMultiStreamProjectionBase`4.RollUpByTenant">
+            <summary>
+            Group events by the tenant id. Use this option if you need to do roll up summaries by
+            tenant id within a conjoined multi-tenanted event store.
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Aggregation.JasperFxMultiStreamProjectionBase`4.CustomGrouping(JasperFx.Events.Grouping.IJasperFxAggregateGrouper{`1,`3})">
+            <summary>
+                Apply a custom event grouping strategy for events. This is additive to Identity() or Identities()
+            </summary>
+            <param name="grouper"></param>
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
+        <member name="M:JasperFx.Events.Aggregation.JasperFxMultiStreamProjectionBase`4.CustomGrouping(System.Func{`3,System.Collections.Generic.IEnumerable{JasperFx.Events.IEvent},JasperFx.Events.Grouping.IEventGrouping{`1},System.Threading.Tasks.Task})">
+            <summary>
+                Apply a custom event grouping strategy for events. This is additive to Identity() or Identities()
+            </summary>
+            <param name="func"></param>
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
+        <member name="M:JasperFx.Events.Aggregation.JasperFxMultiStreamProjectionBase`4.CustomGrouping(JasperFx.Events.Grouping.IEventSlicer{`0,`1,`3})">
+            <summary>
+            If your grouping of events to aggregates doesn't fall into any simple pattern supported
+            directly by MultiStreamProjection, supply your own "let me do whatever I want" event slicer
+            </summary>
+            <param name="slicer"></param>
+        </member>
+        <member name="T:JasperFx.Events.Aggregation.NaturalKeyAttribute">
+            <summary>
+            Marks a property on an aggregate type as a natural key for the event stream.
+            The natural key provides an alternative lookup for FetchForWriting/FetchLatest
+            using a domain-meaningful identifier alongside the surrogate stream id.
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.Aggregation.NaturalKeySourceAttribute">
+            <summary>
+            Marks an Apply/Create method on a self-aggregating snapshot as a source
+            of natural key values. The method's event parameter type will be registered
+            as a natural key event mapping.
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.Archived">
+            <summary>
+            The presence of this event marks a stream as "archived" when it is processed
+            by a single stream projection of any sort
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Archived.#ctor(System.String)">
+            <summary>
+            The presence of this event marks a stream as "archived" when it is processed
+            by a single stream projection of any sort
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.Compacted`1">
+            <summary>
+            Represents a "compacted" stream snapshot of this event stream
+            </summary>
+            <param name="Snapshot"></param>
+            <param name="PreviousStreamId"></param>
+            <param name="PreviousStreamKey"></param>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:JasperFx.Events.Compacted`1.#ctor(`0,System.Guid,System.String)">
+            <summary>
+            Represents a "compacted" stream snapshot of this event stream
+            </summary>
+            <param name="Snapshot"></param>
+            <param name="PreviousStreamId"></param>
+            <param name="PreviousStreamKey"></param>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:JasperFx.Events.Compacted`1.Snapshot">
+            <summary></summary>
+        </member>
+        <member name="P:JasperFx.Events.Compacted`1.PreviousStreamId">
+            <summary></summary>
+        </member>
+        <member name="P:JasperFx.Events.Compacted`1.PreviousStreamKey">
+            <summary></summary>
+        </member>
+        <member name="F:JasperFx.Events.Daemon.DaemonMode.Disabled">
+            <summary>
+                The projection daemon is disabled in this application and
+                will not be started as part of the application
+            </summary>
+        </member>
+        <member name="F:JasperFx.Events.Daemon.DaemonMode.Solo">
+            <summary>
+                The system will start up the complete projection daemon with the assumption
+                that this node is the only execution node. This is appropriate for single
+                node deployments and local development usage
+            </summary>
+        </member>
+        <member name="F:JasperFx.Events.Daemon.DaemonMode.HotCold">
+            <summary>
+                Marten will ensure that the full async projection daemon will only execute on
+                one node at a time, with fail over to other nodes.
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Daemon.IReadOnlyDaemonSettings.StaleSequenceThreshold">
+            <summary>
+                If the projection daemon detects a "stale" event sequence that is probably cause
+                by sequence numbers being reserved, but never committed, this is the threshold to say
+                "just look for the highest contiguous sequence number newer than X amount of time" to trigger
+                the daemon to continue advancing. The default is 3 seconds.
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Daemon.IReadOnlyDaemonSettings.SlowPollingTime">
+            <summary>
+                Polling time between looking for a new high water sequence mark
+                if the daemon detects low activity. The default is 1 second.
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Daemon.IReadOnlyDaemonSettings.FastPollingTime">
+            <summary>
+                Polling time between looking for a new high water sequence mark
+                if the daemon detects high activity. The default is 250ms
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Daemon.IReadOnlyDaemonSettings.HealthCheckPollingTime">
+            <summary>
+                Polling time for the running projection daemon to determine the health
+                of its activities and try to restart anything that is not currently running
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Daemon.IReadOnlyDaemonSettings.AsyncMode">
+            <summary>
+                Projection Daemon mode. The default is Disabled
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Daemon.DaemonSettings.OtelPrefix">
+            <summary>
+            All daemon related metrics and activity spans will use this prefix
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Daemon.DaemonSettings.ActivitySource">
+            <summary>
+            For Open Telemetry tracing. May be null to denote disabled Activity tracking within the Daemon
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Daemon.DaemonSettings.DaemonLockId">
+            <summary>
+                This is used to establish a global lock id for the async daemon and should
+                be unique for any applications that target the same database.
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Daemon.DaemonSettings.LeadershipPollingTime">
+            <summary>
+                Time in milliseconds to poll for leadership election in the async projection daemon
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Daemon.DaemonSettings.StaleSequenceThreshold">
+            <summary>
+                If the projection daemon detects a "stale" event sequence that is probably cause
+                by sequence numbers being reserved, but never committed, this is the threshold to say
+                "just look for the highest contiguous sequence number newer than X amount of time" to trigger
+                the daemon to continue advancing. The default is 3 seconds.
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Daemon.DaemonSettings.SlowPollingTime">
+            <summary>
+                Polling time between looking for a new high water sequence mark
+                if the daemon detects low activity. The default is 1 second.
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Daemon.DaemonSettings.FastPollingTime">
+            <summary>
+                Polling time between looking for a new high water sequence mark
+                if the daemon detects high activity. The default is 250ms
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Daemon.DaemonSettings.HealthCheckPollingTime">
+            <summary>
+                Polling time for the running projection daemon to determine the health
+                of its activities and try to restart anything that is not currently running
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Daemon.DaemonSettings.AgentPauseTime">
+            <summary>
+            If a subscription has been paused for any reason
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Daemon.DaemonSettings.AsyncMode">
+            <summary>
+                Projection Daemon mode. The default is Disabled. 
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Daemon.ErrorHandlingOptions.SkipApplyErrors">
+            <summary>
+            Should the daemon skip any "poison pill" events that fail in user projection code?
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Daemon.ErrorHandlingOptions.SkipUnknownEvents">
+            <summary>
+            Should the daemon skip any unknown event types encountered when trying to
+            fetch events?
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Daemon.ErrorHandlingOptions.SkipSerializationErrors">
+            <summary>
+            Should the daemon skip any events that experience serialization errors?
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.HighWater.HighWaterAgent.DetermineCurrentMarkAsync(System.Threading.CancellationToken)">
+            <summary>
+            Optimized for the quickest possible check of the high water mark for testing
+            </summary>
+            <param name="cancellation"></param>
+            <returns></returns>
+        </member>
+        <member name="P:JasperFx.Events.Daemon.HighWater.HighWaterStatistics.IncludesSkipping">
+            <summary>
+            Did this determination of the "high water" mark include skipping over stale
+            gaps in the event sequence?
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IAggregationProjection`4.RaiseSideEffects(`2,JasperFx.Events.IEventSlice{`0})">
+            <summary>
+            Use to create "side effects" when running an aggregation (single stream, custom projection, multi-stream)
+            asynchronously in a continuous mode (i.e., not in rebuilds)
+            </summary>
+            <param name="operations"></param>
+            <param name="slice"></param>
+            <returns></returns>
+        </member>
+        <member name="T:JasperFx.Events.Daemon.IAggregationSteps`2">
+            <summary>
+                Fluent interface option for expressing aggregation projections
+            </summary>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TQuerySession"></typeparam>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IAggregationSteps`2.CreateEvent``1(System.Func{``0,`0})">
+            <summary>
+                Create a new instance of the aggregate T when the event TEvent is encountered -- if the aggregate does
+                not already exist
+            </summary>
+            <param name="creator"></param>
+            <typeparam name="TEvent"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IAggregationSteps`2.CreateEvent``1(System.Func{``0,`1,System.Threading.Tasks.Task{`0}})">
+            <summary>
+                Create a new instance of the aggregate T when the event TEvent is encountered -- if the aggregate does
+                not already exist
+            </summary>
+            <param name="creator"></param>
+            <typeparam name="TEvent"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IAggregationSteps`2.DeleteEvent``1">
+            <summary>
+                Delete the aggregate document when event of type TEvent is encountered
+            </summary>
+            <typeparam name="TEvent"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IAggregationSteps`2.DeleteEvent``1(System.Func{``0,System.Boolean})">
+            <summary>
+                Conditionally delete the aggregate document when event of type TEvent is encountered based on the supplied
+                shouldDelete test
+            </summary>
+            <param name="shouldDelete"></param>
+            <typeparam name="TEvent"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IAggregationSteps`2.DeleteEvent``1(System.Func{`0,``0,System.Boolean})">
+            <summary>
+                Conditionally delete the aggregate document when event of type TEvent is encountered based on the supplied
+                shouldDelete test
+            </summary>
+            <param name="shouldDelete"></param>
+            <typeparam name="TEvent"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IAggregationSteps`2.DeleteEventAsync``1(System.Func{`1,`0,``0,System.Threading.Tasks.Task{System.Boolean}})">
+            <summary>
+                Conditionally delete the aggregate document when event of type TEvent is encountered based on the supplied
+                shouldDelete test
+            </summary>
+            <param name="shouldDelete"></param>
+            <typeparam name="TEvent"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IAggregationSteps`2.ProjectEvent``1(System.Action{`0})">
+            <summary>
+                Apply changes to the existing aggregate based on the event type TEvent
+            </summary>
+            <param name="handler"></param>
+            <typeparam name="TEvent"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IAggregationSteps`2.ProjectEvent``1(System.Action{`0,``0})">
+            <summary>
+                Apply changes to the existing aggregate based on the event type TEvent
+            </summary>
+            <param name="handler"></param>
+            <typeparam name="TEvent"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IAggregationSteps`2.ProjectEvent``1(System.Func{`0,``0,`0})">
+            <summary>
+                Apply changes to the existing aggregate based on the event type TEvent and return
+                a new aggregate. This is appropriate for immutable aggregate documents
+            </summary>
+            <param name="handler"></param>
+            <typeparam name="TEvent"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IAggregationSteps`2.ProjectEvent``1(System.Func{`0,`0})">
+            <summary>
+                Apply changes to the existing aggregate based on the event type TEvent and return
+                a new aggregate. This is appropriate for immutable aggregate documents
+            </summary>
+            <param name="handler"></param>
+            <typeparam name="TEvent"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IAggregationSteps`2.ProjectEvent``1(System.Action{`1,`0,``0})">
+            <summary>
+                Apply changes to the existing aggregate based on the event type TEvent
+            </summary>
+            <param name="handler"></param>
+            <typeparam name="TEvent"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IAggregationSteps`2.ProjectEventAsync``1(System.Func{`1,`0,``0,System.Threading.Tasks.Task})">
+            <summary>
+                Apply changes to the existing aggregate based on the event type TEvent.
+            </summary>
+            <param name="handler"></param>
+            <typeparam name="TEvent"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IAggregationSteps`2.ProjectEventAsync``1(System.Func{`1,`0,``0,System.Threading.Tasks.Task{`0}})">
+            <summary>
+                Apply changes to the existing aggregate based on the event type TEvent and return
+                a new aggregate. This is appropriate for immutable aggregate documents
+            </summary>
+            <param name="handler"></param>
+            <typeparam name="TEvent"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IAggregationSteps`2.TransformsEvent``1">
+            <summary>
+                Register a source event that is transformed within this aggregation. This is important for
+                asynchronous projections to enable the projection to subscribe to the source event type
+                event though there are no direct handlers for the source event type
+            </summary>
+            <typeparam name="TEvent"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="T:JasperFx.Events.Daemon.IProjectionDaemon">
+            <summary>
+                Starts, stops, and manages any running asynchronous projections
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IProjectionDaemon.PrepareForRebuildsAsync">
+            <summary>
+            Puts this daemon in a mode appropriate for rebuilding by stopping any
+            running high water detection and running the high water detection once to
+            set the ceiling for rebuilds
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:JasperFx.Events.Daemon.IProjectionDaemon.Tracker">
+            <summary>
+                Observable tracking of projection shard events
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Daemon.IProjectionDaemon.IsRunning">
+            <summary>
+            Indicates if this daemon is currently running any subscriptions
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IProjectionDaemon.RebuildProjectionAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+                Rebuilds a single projection by projection name inline.
+                Will timeout if a shard takes longer than 5 minutes.
+            </summary>
+            <param name="projectionName"></param>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IProjectionDaemon.RebuildProjectionAsync``1(System.Threading.CancellationToken)">
+            <summary>
+                Rebuilds a single projection by projection type inline.
+                Will timeout if a shard takes longer than 5 minutes.
+            </summary>
+            <typeparam name="TView">Projection view type</typeparam>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IProjectionDaemon.RebuildProjectionAsync(System.Type,System.Threading.CancellationToken)">
+            <summary>
+                Rebuilds a single projection by projection type inline.
+                Will timeout if a shard takes longer than 5 minutes.
+            </summary>
+            <param name="projectionType">The projection type</param>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IProjectionDaemon.RebuildProjectionAsync(System.Type,System.TimeSpan,System.Threading.CancellationToken)">
+            <summary>
+                Rebuilds a single projection by projection name inline
+            </summary>
+            <param name="projectionType">The projection type</param>
+            <param name="shardTimeout"></param>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IProjectionDaemon.RebuildProjectionAsync(System.String,System.TimeSpan,System.Threading.CancellationToken)">
+            <summary>
+                Rebuilds a single projection by projection name inline
+            </summary>
+            <param name="projectionName"></param>
+            <param name="shardTimeout"></param>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IProjectionDaemon.RebuildProjectionAsync``1(System.TimeSpan,System.Threading.CancellationToken)">
+            <summary>
+                Rebuilds a single projection by projection type inline
+            </summary>
+            <typeparam name="TView">Projection view type</typeparam>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IProjectionDaemon.StartAgentAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+                Starts a single projection shard by name
+            </summary>
+            <param name="shardName">The full identity of the desired shard. Example 'Trip:All'</param>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IProjectionDaemon.StartAgentAsync(JasperFx.Events.Projections.ShardName,System.Threading.CancellationToken)">
+            <summary>
+                Starts a single projection shard by name
+            </summary>
+            <param name="shardName">The full identity of the desired shard. Example 'Trip:All'</param>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IProjectionDaemon.StopAgentAsync(System.String,System.Exception)">
+            <summary>
+                Stops a single projection shard by name
+            </summary>
+            <param name="shardName">The full identity of the desired shard. Example 'Trip:All'</param>
+            <param name="ex"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IProjectionDaemon.StopAgentAsync(JasperFx.Events.Projections.ShardName,System.Exception)">
+            <summary>
+                Stops a single projection shard by name
+            </summary>
+            <param name="shardName">The full identity of the desired shard. Example 'Trip:All'</param>
+            <param name="ex"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IProjectionDaemon.StartAllAsync">
+            <summary>
+                Starts all known projections shards
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IProjectionDaemon.CatchUpAsync(System.Threading.CancellationToken)">
+             <summary>
+             Optimized mechanism to advance all asynchronous projections
+             and subscriptions to the high water mark inline. This is meant
+             for test automation and assumes a relatively small database size
+            
+             This will first stop any running agents before continuing. You will have to
+             explicitly restart the daemon after executing this
+            
+             Not meant for production usage!
+             </summary>
+             <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IProjectionDaemon.CatchUpAsync(System.TimeSpan,System.Threading.CancellationToken)">
+             <summary>
+             Optimized mechanism to advance all asynchronous projections
+             and subscriptions to the high water mark inline. This is meant
+             for test automation and assumes a relatively small database size
+            
+             This will first stop any running agents before continuing. You will have to
+             explicitly restart the daemon after executing this
+            
+             Not meant for production usage!
+             </summary>
+             <param name="timeout">Maximum time to wait for catch up to complete</param>
+             <param name="cancellation"></param>
+             <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IProjectionDaemon.StopAllAsync">
+            <summary>
+                Stops all known projection shards
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IProjectionDaemon.WaitForNonStaleData(System.TimeSpan)">
+            <summary>
+                Use with caution! This will try to wait for all projections to "catch up" to the currently
+                known farthest known sequence of the event store
+            </summary>
+            <param name="timeout"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IProjectionDaemon.CurrentAgents">
+            <summary>
+            List of agents that are currently running or paused
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IProjectionDaemon.HasAnyPaused">
+            <summary>
+            Are there any paused agents?
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IProjectionDaemon.EjectPausedShard(System.String)">
+            <summary>
+            Will eject a Paused
+            </summary>
+            <param name="shardName"></param>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IProjectionDaemon.WaitForShardToBeRunning(System.String,System.TimeSpan)">
+            <summary>
+            Wait until the named shard has been started
+            </summary>
+            <param name="shardName"></param>
+            <param name="timeout"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.IProjectionDaemon.RewindSubscriptionAsync(System.String,System.Threading.CancellationToken,System.Nullable{System.Int64},System.Nullable{System.DateTimeOffset})">
+            <summary>
+            Rewinds a subscription (or projection, so be careful with this usage) to a certain point
+            and allows it to restart at that point
+            </summary>
+            <param name="subscriptionName">Name of the subscription</param>
+            <param name="token"></param>
+            <param name="sequenceFloor">The point at which to rewind the subscription. The default is zero</param>
+            <param name="timestamp">Optional parameter to rewind the subscription to rerun any events that were posted on or after this time. If the system cannot determine the sequence, it will do nothing</param>
+            <returns></returns>
+        </member>
+        <member name="T:JasperFx.Events.Daemon.ISubscriptionAgent">
+            <summary>
+                Used internally by asynchronous projections.
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.ISubscriptionAgent.RecordDeadLetterEventAsync(JasperFx.Events.Daemon.DeadLetterEvent)">
+            <summary>
+                Record a dead letter event for the failure to process the current
+                event
+            </summary>
+            <param name="event"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.ISubscriptionAgent.MarkSkipped(System.Int64)">
+            <summary>
+            Mark an event as having been skipped during asynchronous messaging. This helps
+            track execution metrics
+            </summary>
+            <param name="sequence"></param>
+        </member>
+        <member name="P:JasperFx.Events.Daemon.ISubscriptionController.ErrorOptions">
+            <summary>
+                The current error handling configuration for this projection or subscription
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.ISubscriptionController.ReportCriticalFailureAsync(System.Exception)">
+            <summary>
+                Tell the governing subscription agent that there was a critical error that
+                should pause the subscription or projection
+            </summary>
+            <param name="ex"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.ISubscriptionController.ReportCriticalFailureAsync(System.Exception,System.Int64)">
+            <summary>
+                Tell the governing subscription agent that there was a critical error that
+                should pause the subscription or projection
+            </summary>
+            <param name="ex"></param>
+            <param name="lastProcessed">This allows a subscription to stop at a point within a batch of events</param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.ISubscriptionController.RecordDeadLetterEventAsync(JasperFx.Events.IEvent,System.Exception)">
+            <summary>
+                Record a dead letter event for the failure to process the current event
+            </summary>
+            <param name="event"></param>
+            <param name="ex"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.ISubscriptionExecution.TryGetAggregateCache``2(JasperFx.Events.Aggregation.IAggregateCaching{``0,``1}@)">
+            <summary>
+            Try to find an aggregate cache for the designated id and aggregate type
+            </summary>
+            <param name="caching"></param>
+            <typeparam name="TId"></typeparam>
+            <typeparam name="TDoc"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="T:JasperFx.Events.Daemon.IReplayExecutor">
+            <summary>
+            Use to create an optimized projection or subscription replay in the case of rewinding all the way
+            back to sequence = 0 (projection rebuilds most likely)
+            </summary>
+        </member>
+        <member name="F:JasperFx.Events.Daemon.ShardAction.Updated">
+            <summary>
+                The projection shard updated successfully
+            </summary>
+        </member>
+        <member name="F:JasperFx.Events.Daemon.ShardAction.Started">
+            <summary>
+                The projection shard was successfully started
+            </summary>
+        </member>
+        <member name="F:JasperFx.Events.Daemon.ShardAction.Stopped">
+            <summary>
+                The projection shard was stopped
+            </summary>
+        </member>
+        <member name="F:JasperFx.Events.Daemon.ShardAction.Paused">
+            <summary>
+                The projection shard was paused and will be restarted
+                after a set amount of time based on error handling policies
+            </summary>
+        </member>
+        <member name="F:JasperFx.Events.Daemon.ShardAction.Skipped">
+            <summary>
+            Recorded for the high water mark when it had to "skip" over stale
+            data and potential holes in the event sequence 
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.Daemon.ShardStartException">
+            <summary>
+                A projection shard failed to start
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.Daemon.ShardStateTracker">
+            <summary>
+                Observable for progress and action updates for all running asynchronous projection shards
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Daemon.ShardStateTracker.HighWaterMark">
+            <summary>
+                Currently known "high water mark" denoting the highest complete sequence
+                of the event storage
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.ShardStateTracker.Subscribe(System.IObserver{JasperFx.Events.Projections.ShardState})">
+            <summary>
+                Register a new observer of projection shard events. The return disposable
+                can be used to unsubscribe the observer from the tracker
+            </summary>
+            <param name="observer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.ShardStateTracker.WaitForShardState(JasperFx.Events.Projections.ShardState,System.Nullable{System.TimeSpan})">
+            <summary>
+                Use to "wait" for an expected projection shard state
+            </summary>
+            <param name="expected"></param>
+            <param name="timeout"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.ShardStateTracker.WaitForShardState(System.String,System.Int64,System.Nullable{System.TimeSpan})">
+            <summary>
+                Use to "wait" for an expected projection shard state
+            </summary>
+            <param name="shardName"></param>
+            <param name="sequence"></param>
+            <param name="timeout"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.ShardStateTracker.WaitForShardState(JasperFx.Events.Projections.ShardName,System.Int64,System.Nullable{System.TimeSpan})">
+            <summary>
+                Use to "wait" for an expected projection shard state
+            </summary>
+            <param name="name"></param>
+            <param name="sequence"></param>
+            <param name="timeout"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.ShardStateTracker.WaitForShardCondition(System.Func{JasperFx.Events.Projections.ShardState,System.Boolean},System.String,System.Nullable{System.TimeSpan})">
+            <summary>
+                Use to "wait" for an expected projection shard condition
+            </summary>
+            <param name="condition"></param>
+            <param name="description"></param>
+            <param name="timeout"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.ShardStateTracker.WaitForHighWaterMark(System.Int64,System.Nullable{System.TimeSpan})">
+            <summary>
+                Wait for the high water mark to attain the given sequence number
+            </summary>
+            <param name="sequence"></param>
+            <param name="timeout"></param>
+            <returns></returns>
+        </member>
+        <member name="T:JasperFx.Events.Daemon.ShardStatusWatcher">
+            <summary>
+                Used mostly by tests to listen for expected shard events or progress
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.Daemon.ShardStopException">
+            <summary>
+                A projection shard failed to stop in a timely manner
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Daemon.SubscriptionAgent.CatchUpAsync(System.Int64,JasperFx.Events.Projections.ShardState,System.Threading.CancellationToken)">
+            <summary>
+            Optimized "catch up" execution of a projection or subscription meant
+            for test automation
+            </summary>
+            <param name="highWaterMark"></param>
+            <param name="state"></param>
+            <param name="cancellation"></param>
+        </member>
+        <member name="T:JasperFx.Events.Daemon.ISubscriptionRunner`1">
+            <summary>
+                Implement on IEventStorage!
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:JasperFx.Events.Daemon.SubscriptionExecutionBase.AttachLogger(Microsoft.Extensions.Logging.ILoggerFactory)" -->
+        <member name="T:JasperFx.Events.ProjectionDeleted`2">
+            <summary>
+            Stand in event used by projections to just denote a document or entity
+            that was deleted as part of an input to an aggregate projection. Synthetic event.
+            </summary>
+            <param name="Identity"></param>
+            <typeparam name="TDoc"></typeparam>
+            <typeparam name="TId"></typeparam>
+        </member>
+        <member name="M:JasperFx.Events.ProjectionDeleted`2.#ctor(`1,System.String)">
+            <summary>
+            Stand in event used by projections to just denote a document or entity
+            that was deleted as part of an input to an aggregate projection. Synthetic event.
+            </summary>
+            <param name="Identity"></param>
+            <typeparam name="TDoc"></typeparam>
+            <typeparam name="TId"></typeparam>
+        </member>
+        <member name="P:JasperFx.Events.ProjectionDeleted`2.Identity">
+            <summary></summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:JasperFx.Events.DeletedIdentity`1" -->
+        <!-- Badly formed XML comment ignored for member "T:JasperFx.Events.ProjectionDeleted`1" -->
+        <member name="M:JasperFx.Events.Descriptors.EventStoreUsage.PopulateAgentUris(System.String,JasperFx.Events.EventStoreIdentity)">
+            <summary>
+            Populates AgentUris on each async SubscriptionDescriptor based on the
+            agent URI pattern: {agentScheme}://{identity.Type}/{identity.Name}/{databaseId}/{shardName.RelativeUrl}
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Descriptors.SubscriptionDescriptor.AgentUris">
+            <summary>
+            Agent URIs that would be assigned for each shard of this subscription
+            as per EventSubscriptionAgentFamily conventions
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Event`1.Data">
+            <summary>
+                The actual event data
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Event`1.UserName">
+            <summary>
+                Optional metadata describing the user name or
+                process name for this unit of work
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Event`1.StreamId">
+            <summary>
+                A reference to the stream that contains
+                this event
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Event`1.StreamKey">
+            <summary>
+                A reference to the stream if the stream
+                identifier mode is AsString
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Event`1.Id">
+            <summary>
+                An alternative Guid identifier to identify
+                events across databases
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Event`1.Version">
+            <summary>
+                An event's version position within its event stream
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Event`1.Sequence">
+            <summary>
+                A global sequential number identifying the Event
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Event`1.Timestamp">
+            <summary>
+                The UTC time that this event was originally captured
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Event`1.CausationId">
+            <summary>
+                Optional metadata describing the causation id
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Event`1.CorrelationId">
+            <summary>
+                Optional metadata describing the correlation id
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Event`1.Headers">
+            <summary>
+                This is meant to be lazy created, and can be null
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Event`1.Tags">
+            <summary>
+            Optional tags for DCB support. Lazy-created.
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Event`1.AddTag``1(``0)">
+            <inheritdoc />
+        </member>
+        <member name="M:JasperFx.Events.Event`1.AddTag(JasperFx.Events.EventTag)">
+            <inheritdoc />
+        </member>
+        <member name="F:JasperFx.Events.EventAppendMode.Rich">
+            <summary>
+            Default behavior that ensures that all inline projections will have full access to all event
+            metadata including intended event sequences, versions, and timestamps
+            </summary>
+        </member>
+        <member name="F:JasperFx.Events.EventAppendMode.Quick">
+            <summary>
+            Stripped down, more performant mode of appending events that will omit some event metadata within
+            inline projections. Event timestamps are taken from the database server
+            </summary>
+        </member>
+        <member name="F:JasperFx.Events.EventAppendMode.QuickWithServerTimestamps">
+            <summary>
+            Stripped down, more performant mode of appending events that will omit some event metadata within
+            inline projections. Event timestamps are taken from TimeProvider in .NET. Use this option if you
+            need to override event timestamps
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.EventExtensions.WithData``1(JasperFx.Events.IEvent,``0)">
+            <summary>
+            Clones the metadata from one event wrapper to another with replaced data.
+            This is useful for "event enrichment" during projections
+            </summary>
+            <param name="event"></param>
+            <param name="eventData"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.EventExtensions.TryFindReference``1(System.Collections.Generic.IEnumerable{JasperFx.Events.IEvent},``0@)">
+            <summary>
+            Tries to find a referenced entity of type T in this EventSlice. Finds the first in the events order
+            if more than one is found
+            </summary>
+            <param name="entity"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:JasperFx.Events.EventExtensions.AllReferenced``1(System.Collections.Generic.IEnumerable{JasperFx.Events.IEvent})" -->
+        <member name="M:JasperFx.Events.EventIdentity.IdentityFor``1(JasperFx.Events.IEvent)">
+            <summary>
+            Use to get an identity off of an IEvent for single stream aggregations
+            </summary>
+            <param name="e"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="P:JasperFx.Events.IEventSlice`1.Snapshot">
+            <summary>
+            The current snapshot of this projected aggregate
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.IEventSlice`1.Aggregate">
+            <summary>
+            The current snapshot of this projected aggregate
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.EventSlice`2">
+            <summary>
+                A grouping of events that will be applied to an aggregate of type TDoc
+                with the identity TId
+            </summary>
+            <typeparam name="TDoc"></typeparam>
+            <typeparam name="TId"></typeparam>
+        </member>
+        <member name="P:JasperFx.Events.EventSlice`2.ActionType">
+            <summary>
+                Is this action the start of a new stream or appending
+                to an existing stream?
+            </summary>
+            <remarks>
+                Default's to determining from the version of the first event on
+                stream, but can be overridden so that the value works with
+                QuickAppend
+            </remarks>
+        </member>
+        <member name="P:JasperFx.Events.EventSlice`2.Id">
+            <summary>
+                The aggregate identity
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.EventSlice`2.Snapshot">
+            <summary>
+                The related aggregate document
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.EventSlice`2.Aggregate">
+            <summary>
+                The related aggregate document
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.EventSlice`2.Events">
+            <summary>
+                All the events in this slice
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.EventSlice`2.AddEvent(JasperFx.Events.IEvent)">
+            <summary>
+                Add a single event to this slice
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:JasperFx.Events.EventSlice`2.AddEvents(System.Collections.Generic.IEnumerable{JasperFx.Events.IEvent})">
+            <summary>
+                Add a grouping of events to this slice
+            </summary>
+            <param name="events"></param>
+        </member>
+        <member name="M:JasperFx.Events.EventSlice`2.AllData">
+            <summary>
+                Iterate through just the event data
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.EventSlice`2.ReplaceEvent``1(JasperFx.Events.IEvent,``0)">
+            <summary>
+            Replace the supplied event within the slice with the new event data
+            but with a copy of the original event's metadata. This is meant for
+            event enrichment within the execution of projections 
+            </summary>
+            <param name="event"></param>
+            <param name="data"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.EventSlice`2.ReplaceEvent``1(System.Int32,``0)">
+            <summary>
+            Replace the supplied event within the slice with the new event data
+            but with a copy of the original event's metadata. This is meant for
+            event enrichment within the execution of projections 
+            </summary>
+            <param name="event"></param>
+            <param name="data"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.EventSlice`2.Reference``1(``0)">
+            <summary>
+            Add a reference to the entity of type T to this EventSlice
+            </summary>
+            <param name="entity"></param>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:JasperFx.Events.EventTag">
+            <summary>
+            Represents a single tag on an event — a (TagType, Value) pair where TagType
+            is a strong-typed identifier type (e.g., typeof(StudentId)) and Value is the
+            actual strong-typed identifier instance (e.g., new StudentId("STU-001")).
+            The value is only unwrapped to its primitive form at the database boundary.
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.EventTag.#ctor(System.Type,System.Object)">
+            <summary>
+            Represents a single tag on an event — a (TagType, Value) pair where TagType
+            is a strong-typed identifier type (e.g., typeof(StudentId)) and Value is the
+            actual strong-typed identifier instance (e.g., new StudentId("STU-001")).
+            The value is only unwrapped to its primitive form at the database boundary.
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.EventTypeExtensions">
+            <summary>
+                Class <c>EventMappingExtensions</c> exposes extensions and helpers to handle event type mapping.
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.EventTypeExtensions.GetEventTypeName(System.Type,JasperFx.Events.EventNamingStyle)">
+            <summary>
+            Get the event type name based on a style
+            </summary>
+            <param name="eventType"></param>
+            <param name="style"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.EventTypeExtensions.GetEventTypeName(System.Type)">
+            <summary>
+                Translates by convention the CLR type name into string event type name.
+                It can handle both regular and generic types.
+            </summary>
+            <param name="eventType">CLR event type</param>
+            <returns>Mapped string event type name</returns>
+        </member>
+        <member name="M:JasperFx.Events.EventTypeExtensions.GetEventTypeName``1">
+            <summary>
+                Translates by convention the CLR type name into string event type name.
+                It can handle both regular and generic types.
+            </summary>
+            <typeparam name="TEvent">CLR event type</typeparam>
+            <returns>Mapped string event type name</returns>
+        </member>
+        <member name="M:JasperFx.Events.EventTypeExtensions.GetEventTypeNameWithSuffix(System.String,System.String)">
+            <summary>
+                Translates by convention the event type name into string event type name and suffix.
+                It can handle both regular and generic types.
+            </summary>
+            <param name="eventTypeName">event type name</param>
+            <param name="suffix">Type name suffix</param>
+            <returns>Mapped string event type name in the format: $"{eventTypeName}_{suffix}"</returns>
+        </member>
+        <member name="M:JasperFx.Events.EventTypeExtensions.GetEventTypeNameWithSuffix(System.Type,System.String)">
+            <summary>
+                Translates by convention the CLR type name into string event type name and suffix.
+                It can handle both regular and generic types.
+            </summary>
+            <param name="eventType">CLR event type</param>
+            <returns>Mapped string event type name with suffix</returns>
+        </member>
+        <member name="M:JasperFx.Events.EventTypeExtensions.GetEventTypeNameWithSuffix``1(System.String)">
+            <summary>
+                Translates by convention the CLR type name into string event type name and suffix.
+                It can handle both regular and generic types.
+            </summary>
+            <typeparam name="TEvent">CLR event type</typeparam>
+            <returns>Mapped string event type name with suffix</returns>
+        </member>
+        <member name="M:JasperFx.Events.EventTypeExtensions.GetEventTypeNameWithSchemaVersion(System.Type,System.UInt32)">
+            <summary>
+                Translates by convention the CLR type name into string event type name with schema version suffix.
+                It can handle both regular and generic types.
+            </summary>
+            <param name="eventType">CLR event type</param>
+            <param name="schemaVersion">Event schema version</param>
+            <returns>Mapped string event type name with schema version suffix</returns>
+        </member>
+        <member name="M:JasperFx.Events.EventTypeExtensions.GetEventTypeNameWithSchemaVersion``1(System.UInt32)">
+            <summary>
+                Translates by convention the CLR type name into string event type name with schema version suffix.
+                It can handle both regular and generic types.
+            </summary>
+            <typeparam name="TEvent">CLR event type</typeparam>
+            <param name="schemaVersion">Event schema version</param>
+            <returns>Mapped string event type name with schema version suffix</returns>
+        </member>
+        <member name="M:JasperFx.Events.EventTypeExtensions.GetEventTypeNameWithSchemaVersion(System.String,System.UInt32)">
+            <summary>
+                Translates by convention the event type name into string event type name with schema version suffix.
+                It can handle both regular and generic types.
+            </summary>
+            <param name="eventTypeName">event type name</param>
+            <param name="schemaVersion">Event schema version</param>
+            <returns>Mapped string event type name in the format: $"{eventTypeName}_{version}"</returns>
+        </member>
+        <member name="M:JasperFx.Events.EventTypeExtensions.CloneEventWithNewData``1(JasperFx.Events.IEvent,``0)">
+            <summary>
+            Create a new IEvent object carrying the original metadata as the original
+            event, but with a different data body. This is used within "fan out"
+            operations within event slicing for multi-stream projections
+            </summary>
+            <param name="event"></param>
+            <param name="eventData"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Grouping.EventSlicer`2.FanOut``2(System.Func{``0,System.Collections.Generic.IEnumerable{``1}},JasperFx.Events.Grouping.FanoutMode)">
+            <summary>
+                Apply "fan out" operations to the given TEvent type that inserts an enumerable of TChild events right behind the
+                parent
+                event in the event stream
+            </summary>
+            <param name="fanOutFunc"></param>
+            <param name="mode">Should the fan out operation happen after grouping, or before? Default is after</param>
+            <typeparam name="TEvent"></typeparam>
+            <typeparam name="TChild"></typeparam>
+        </member>
+        <member name="M:JasperFx.Events.Grouping.EventSlicer`2.FanOut``2(System.Func{JasperFx.Events.IEvent{``0},System.Collections.Generic.IEnumerable{``1}},JasperFx.Events.Grouping.FanoutMode)">
+            <summary>
+                Apply "fan out" operations to the given TEvent type that inserts an enumerable of TChild events right behind the
+                parent
+                event in the event stream
+            </summary>
+            <param name="fanOutFunc"></param>
+            <param name="mode">Should the fan out operation happen after grouping, or before? Default is after</param>
+            <typeparam name="TEvent"></typeparam>
+            <typeparam name="TChild"></typeparam>
+        </member>
+        <member name="F:JasperFx.Events.Grouping.TenancyGrouping.RespectTenant">
+            <summary>
+            Default behavior where the projection groups the event data by tenant id before applying event slicing
+            </summary>
+        </member>
+        <member name="F:JasperFx.Events.Grouping.TenancyGrouping.RollUpByTenant">
+            <summary>
+            Specialized slicing behavior where there is a single document created for each tenant id
+            </summary>
+        </member>
+        <member name="F:JasperFx.Events.Grouping.TenancyGrouping.AcrossTenants">
+            <summary>
+            Slicing behavior works across tenants
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.Grouping.IEventGrouping`1">
+            <summary>
+                Represents a grouping of a range of events by aggregate id. Used in aggregation projections
+            </summary>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TId"></typeparam>
+        </member>
+        <member name="M:JasperFx.Events.Grouping.IEventGrouping`1.AddEvent(`0,JasperFx.Events.IEvent)">
+            <summary>
+                Add a single event to a single event slice by id
+            </summary>
+            <param name="id">The aggregate id</param>
+            <param name="event"></param>
+        </member>
+        <member name="M:JasperFx.Events.Grouping.IEventGrouping`1.AddEvents(`0,System.Collections.Generic.IEnumerable{JasperFx.Events.IEvent})">
+            <summary>
+                Add many events to a single event slice by aggregate id
+            </summary>
+            <param name="id">The aggregate id</param>
+            <param name="events"></param>
+        </member>
+        <member name="M:JasperFx.Events.Grouping.IEventGrouping`1.AddEvents``1(System.Func{``0,`0},System.Collections.Generic.IEnumerable{JasperFx.Events.IEvent})">
+            <summary>
+                Add events to streams where each event of type TEvent applies to only
+                one stream
+            </summary>
+            <param name="singleIdSource"></param>
+            <param name="events"></param>
+            <typeparam name="TEvent"></typeparam>
+        </member>
+        <member name="M:JasperFx.Events.Grouping.IEventGrouping`1.AddEvents``1(System.Func{``0,System.Collections.Generic.IEnumerable{`0}},System.Collections.Generic.IEnumerable{JasperFx.Events.IEvent})">
+            <summary>
+                Add events to streams where each event of type TEvent may be related to many
+                different aggregates
+            </summary>
+            <param name="multipleIdSource"></param>
+            <param name="events"></param>
+            <typeparam name="TEvent"></typeparam>
+        </member>
+        <member name="M:JasperFx.Events.Grouping.IEventGrouping`1.FanOutOnEach``2(System.Func{``0,System.Collections.Generic.IEnumerable{``1}})">
+            <summary>
+                Apply "fan out" operations to the given TSource type that inserts an enumerable of TChild events right behind the
+                parent
+                event in the event stream just after any instance of the parent
+            </summary>
+            <param name="fanOutFunc"></param>
+            <typeparam name="TSource"></typeparam>
+            <typeparam name="TChild"></typeparam>
+        </member>
+        <member name="M:JasperFx.Events.Grouping.IEventSlicer`2.SliceAsync(System.Collections.Generic.IReadOnlyList{JasperFx.Events.IEvent},JasperFx.Events.Grouping.SliceGroup{`0,`1})">
+            <summary>
+                This is called by the asynchronous projection runner
+            </summary>
+            <param name="events">Enumerable of new events within the current event range (page) that is currently being processed by the projection</param>
+            <param name="grouping"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Grouping.IEventSlicer`3.SliceAsync(`2,System.Collections.Generic.IReadOnlyList{JasperFx.Events.IEvent},JasperFx.Events.Grouping.SliceGroup{`0,`1})">
+            <summary>
+                This is called by the asynchronous projection runner
+            </summary>
+            <param name="events">Enumerable of new events within the current event range (page) that is currently being processed by the projection</param>
+            <param name="grouping"></param>
+            <returns></returns>
+        </member>
+        <member name="T:JasperFx.Events.Grouping.IJasperFxAggregateGrouper`2">
+            <summary>
+                Plugin point to create custom event to aggregate grouping that requires database lookup
+                as part of the sorting of events into aggregate slices
+            </summary>
+            <typeparam name="TId"></typeparam>
+            <typeparam name="TQuerySession"></typeparam>
+        </member>
+        <member name="M:JasperFx.Events.Grouping.IJasperFxAggregateGrouper`2.Group(`1,System.Collections.Generic.IEnumerable{JasperFx.Events.IEvent},JasperFx.Events.Grouping.IEventGrouping{`0})">
+            <summary>
+                Apply custom grouping rules to apply events to one or many aggregates
+            </summary>
+            <param name="session"></param>
+            <param name="events"></param>
+            <param name="grouping"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Grouping.EventSlicer`3.CustomGrouping(JasperFx.Events.Grouping.IJasperFxAggregateGrouper{`1,`2})">
+            <summary>
+                Apply a custom event grouping strategy for events. This is additive to Identity() or Identities()
+            </summary>
+            <param name="grouper"></param>
+        </member>
+        <member name="M:JasperFx.Events.Grouping.EventSlicer`3.CustomGrouping(System.Func{`2,System.Collections.Generic.IEnumerable{JasperFx.Events.IEvent},JasperFx.Events.Grouping.IEventGrouping{`1},System.Threading.Tasks.Task})">
+            <summary>
+                Apply a custom event grouping strategy for events. This is additive to Identity() or Identities()
+            </summary>
+            <param name="grouper"></param>
+        </member>
+        <member name="M:JasperFx.Events.Grouping.EventSlicer`3.FanOut``2(System.Func{``0,System.Collections.Generic.IEnumerable{``1}},JasperFx.Events.Grouping.FanoutMode)">
+            <summary>
+                Apply "fan out" operations to the given TEvent type that inserts an enumerable of TChild events right behind the
+                parent
+                event in the event stream
+            </summary>
+            <param name="fanOutFunc"></param>
+            <param name="mode">Should the fan out operation happen after grouping, or before? Default is after</param>
+            <typeparam name="TEvent"></typeparam>
+            <typeparam name="TChild"></typeparam>
+        </member>
+        <member name="M:JasperFx.Events.Grouping.EventSlicer`3.FanOut``2(System.Func{JasperFx.Events.IEvent{``0},System.Collections.Generic.IEnumerable{``1}},JasperFx.Events.Grouping.FanoutMode)">
+            <summary>
+                Apply "fan out" operations to the given TEvent type that inserts an enumerable of TChild events right behind the
+                parent
+                event in the event stream
+            </summary>
+            <param name="fanOutFunc"></param>
+            <param name="mode">Should the fan out operation happen after grouping, or before? Default is after</param>
+            <typeparam name="TEvent"></typeparam>
+            <typeparam name="TChild"></typeparam>
+        </member>
+        <member name="T:JasperFx.Events.Grouping.FanoutMode">
+            <summary>
+                When does the fanout rule apply?
+            </summary>
+        </member>
+        <member name="F:JasperFx.Events.Grouping.FanoutMode.BeforeGrouping">
+            <summary>
+                Do the "fan out" of events *before* doing any grouping
+            </summary>
+        </member>
+        <member name="F:JasperFx.Events.Grouping.FanoutMode.AfterGrouping">
+            <summary>
+                Do the "fan out" of events *after* grouping
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.Grouping.SliceGroup`2">
+            <summary>
+            Structure to hold and help organize events in "slices" by identity to apply
+            to the matching aggregate document TDoc. Note that TDoc might be a marker type.
+            </summary>
+            <typeparam name="TDoc"></typeparam>
+            <typeparam name="TId"></typeparam>
+        </member>
+        <member name="M:JasperFx.Events.Grouping.SliceGroup`2.#ctor">
+            <summary>
+            Really only for testing
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Grouping.SliceGroup`2.AddEvents``1(System.Func{``0,`1},System.Collections.Generic.IEnumerable{JasperFx.Events.IEvent})">
+            <summary>
+                Add events to streams where each event of type TEvent applies to only
+                one stream
+            </summary>
+            <param name="singleIdSource"></param>
+            <param name="events"></param>
+            <typeparam name="TEvent"></typeparam>
+        </member>
+        <member name="M:JasperFx.Events.Grouping.SliceGroup`2.FanOutOnEach``2(System.Func{``0,System.Collections.Generic.IEnumerable{``1}})">
+            <summary>
+                Apply "fan out" operations to the given TSource type that inserts an enumerable of TChild events right behind the
+                parent
+                event in the event stream just after any instance of the parent
+            </summary>
+            <param name="fanOutFunc"></param>
+            <typeparam name="TSource"></typeparam>
+            <typeparam name="TChild"></typeparam>
+        </member>
+        <member name="M:JasperFx.Events.Grouping.SliceGroup`2.AddEvents``1(System.Func{``0,System.Collections.Generic.IEnumerable{`1}},System.Collections.Generic.IEnumerable{JasperFx.Events.IEvent})">
+            <summary>
+                Add events to multiple slices where each event of type TEvent may be related to many
+                different aggregates
+            </summary>
+            <param name="multipleIdSource"></param>
+            <param name="events"></param>
+            <typeparam name="TEvent"></typeparam>
+        </member>
+        <member name="M:JasperFx.Events.Grouping.SliceGroup`2.AddEvent(`1,JasperFx.Events.IEvent)">
+            <summary>
+                Add a single event to a single event slice by id
+            </summary>
+            <param name="id">The aggregate id</param>
+            <param name="event"></param>
+        </member>
+        <member name="M:JasperFx.Events.Grouping.SliceGroup`2.AddEvents(`1,System.Collections.Generic.IEnumerable{JasperFx.Events.IEvent})">
+            <summary>
+                Add many events to a single event slice by aggregate id
+            </summary>
+            <param name="id">The aggregate id</param>
+            <param name="events"></param>
+        </member>
+        <member name="M:JasperFx.Events.Grouping.SliceGroup`2.EnrichWith``1">
+            <summary>
+            Apply "enrichment" to the event groups to add contextual inforation with data
+            lookups from other data in the system or upstream projections
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <returns></returns>
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:JasperFx.Events.Grouping.SliceGroup`2.EntityStep`1.ForEvent``1" -->
+        <member name="M:JasperFx.Events.Grouping.SliceGroup`2.EventStep`2.ForEntityId``1(System.Func{`3,``0})">
+            <summary>
+            Specify *how* the enrichment can find the identity TId from the events of type TEvent for entities
+            of type TEntity
+            </summary>
+            <param name="identitySource"></param>
+            <typeparam name="TEntityId"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Grouping.SliceGroup`2.EventStep`2.ForEntityIdFromEvent``1(System.Func{JasperFx.Events.IEvent{`3},``0})">
+            <summary>
+            Specify *how* the enrichment can find the identity TId from the events of type TEvent for entities
+            of type TEntity
+            </summary>
+            <param name="identitySource"></param>
+            <typeparam name="TEntityId"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Grouping.SliceGroup`2.EventStep`2.EnrichUsingEntityQuery``1(System.Func{System.Collections.Generic.IReadOnlyList{JasperFx.Events.EventSlice{`0,`1}},System.Collections.Generic.IReadOnlyList{JasperFx.Events.IEvent{`3}},JasperFx.Core.IAggregateCache{``0,`2},System.Threading.CancellationToken,System.Threading.Tasks.Task},System.Threading.CancellationToken)">
+             <summary>
+             Execute a batched enrichment operation for events of type <typeparamref name="TEvent"/>,
+             allowing the caller to perform a single lookup using any external query mechanism
+             captured in the provided delegate and apply the results directly to the active slices.
+             </summary>
+             <remarks>
+             This method is intended for enrichment scenarios where related entities cannot be
+             resolved by a simple identity lookup, or where applying the enrichment requires custom
+             logic beyond a basic reference or replacement.
+            
+             The delegate receives all slices and all matching events in the current batch, so it can:
+             query data in one round trip, match the results to events using any correlation key,
+             and then mutate the slices by referencing entities, replacing events, or adding synthetic events.
+            
+             An upstream aggregate cache, if available, is passed through to the delegate but is never
+             accessed or mutated by this method. Cache usage is entirely controlled by the caller.
+             </remarks>
+             <param name="enrichment">
+             A delegate invoked once per enrichment execution. The delegate receives:
+             <list type="bullet">
+             <item>
+             <description>
+             The active <see cref="T:JasperFx.Events.EventSlice`2"/> instances for this batch
+             </description>
+             </item>
+             <item>
+             <description>
+             The complete set of events of type <typeparamref name="TEvent"/> occurring in those slices
+             </description>
+             </item>
+             <item>
+             <description>
+             An optional upstream aggregate cache for entities that the caller may consult or populate
+             </description>
+             </item>
+             <item>
+             <description>
+             A cancellation token
+             </description>
+             </item>
+             </list>
+             </param>
+             <param name="cancellation">
+             A cancellation token used to cancel the enrichment operation.
+             </param>
+        </member>
+        <member name="M:JasperFx.Events.Grouping.SliceGroup`2.ReferencePeerView``1">
+            <summary>
+            If you have a parallel projected view (or document) that shares
+            the same identity, this will look up and reference the matching T
+            for each active event slice
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:JasperFx.Events.Grouping.TenantGroup">
+            <summary>
+            A group of events by tenant id
+            </summary>
+            <param name="TenantId"></param>
+        </member>
+        <member name="F:JasperFx.Events.EventNamingStyle.ClassicTypeName">
+            <summary>
+            The default, "classic" style of event name that converts *just* the type name in Pascal Case to
+            all lower case w/ snake casing
+            </summary>
+        </member>
+        <member name="F:JasperFx.Events.EventNamingStyle.SmarterTypeName">
+            <summary>
+            Like the "classic" style, but handles inner type names by prepending the [outer type].[inner type] to disambiguate
+            the naming for inner types
+            </summary>
+        </member>
+        <member name="F:JasperFx.Events.EventNamingStyle.FullTypeName">
+            <summary>
+            Use the full name for the event type alias. Note that this is going to be a little more brittle if you move
+            event types into different namespaces, but hey, it will disambiguate event types with the same name in the same
+            application
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.Event">
+            <summary>
+            Utility to build event wrappers for JasperFx event stores
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Event.For``1(``0)">
+            <summary>
+            Convenience method to wrap an object with the JasperFx Event typed wrapper
+            </summary>
+            <param name="data"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Event.For``1(System.String,``0)">
+            <summary>
+            Convenience method to wrap an object with the JasperFx Event typed wrapper
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Event.AsEvent``1(``0)">
+            <summary>
+            Wrap an object with the correct JasperFx event envelope
+            </summary>
+            <param name="data"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Event.AtTimestamp(JasperFx.Events.IEvent,System.DateTimeOffset)">
+            <summary>
+            Set the timestamp of an event
+            </summary>
+            <param name="e"></param>
+            <param name="timestamp"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Event.WithHeader(JasperFx.Events.IEvent,System.String,System.Object)">
+            <summary>
+            Add an event to just this event
+            </summary>
+            <param name="e"></param>
+            <param name="key"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Event.WithTag``1(JasperFx.Events.IEvent,``0)">
+            <summary>
+            Tag this event with a strong-typed identifier for DCB support.
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Event.WithTag(JasperFx.Events.IEvent,System.Object[])">
+            <summary>
+            Tag this event with multiple strong-typed identifiers for DCB support.
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.IEvent.Id">
+            <summary>
+                Unique identifier for the event. Uses a sequential Guid
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.IEvent.Version">
+            <summary>
+                The version of the stream this event reflects. The place in the stream.
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.IEvent.Sequence">
+            <summary>
+                The sequential order of this event in the entire event store
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.IEvent.Data">
+            <summary>
+                The actual event data body
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.IEvent.StreamId">
+            <summary>
+                If using Guid's for the stream identity, this will
+                refer to the Stream's Id, otherwise it will always be Guid.Empty
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.IEvent.StreamKey">
+            <summary>
+                If using strings as the stream identifier, this will refer
+                to the containing Stream's Id
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.IEvent.Timestamp">
+            <summary>
+                The UTC time that this event was originally captured
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.IEvent.TenantId">
+            <summary>
+                If using multi-tenancy by tenant id
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.IEvent.EventType">
+            <summary>
+                The .Net type of the event body
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.IEvent.EventTypeName">
+            <summary>
+                JasperFx.Event's type alias string for the Event type
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.IEvent.DotNetTypeName">
+            <summary>
+                JasperFx.Events's string representation of the event type
+                in assembly qualified name
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.IEvent.CausationId">
+            <summary>
+                Optional metadata describing the causation id
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.IEvent.CorrelationId">
+            <summary>
+                Optional metadata describing the correlation id
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.IEvent.Headers">
+            <summary>
+                Optional user defined metadata values. This may be null.
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.IEvent.Tags">
+            <summary>
+            Optional tags for Dynamic Consistency Boundary (DCB) support.
+            Tags are strong-typed identifier values used for cross-stream querying and consistency.
+            This may be null if no tags have been set.
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.IEvent.IsArchived">
+            <summary>
+                Has this event been archived and no longer applicable
+                to projected views
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.IEvent.AggregateTypeName">
+            <summary>
+                JasperFx.Events's name for the aggregate type that will be persisted
+                to the streams table. This will only be available when running
+                within the Async Daemon
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.IEvent.SetHeader(System.String,System.Object)">
+            <summary>
+                Set an optional user defined metadata value by key
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:JasperFx.Events.IEvent.GetHeader(System.String)">
+            <summary>
+                Get an optional user defined metadata value by key
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.IEvent.CreateAggregateIdentitySource``1">
+            <summary>
+            Build a Func that can resolve an identity from the IEvent and even
+            handles the dastardly strong typed identifiers
+            </summary>
+            <typeparam name="TId"></typeparam>
+            <returns></returns>
+            <exception cref="T:System.NotSupportedException"></exception>
+        </member>
+        <member name="P:JasperFx.Events.IEvent.UserName">
+            <summary>
+                Optional metadata describing the user name or
+                process name for the unit of work that captured this event
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.IEvent.IsSkipped">
+            <summary>
+            No, this is *not* idiomatic event sourcing, but this may be used as metadata to direct
+            projection replays or subscription rewinding as an event that should not be used
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.IEvent.AddTag``1(``0)">
+            <summary>
+            Add a tag to this event for DCB support. The tag must be a strong-typed identifier
+            registered with the event store.
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.IEvent.AddTag(JasperFx.Events.EventTag)">
+            <summary>
+            Add a tag to this event using a raw EventTag value.
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.IEventDatabase.Identifier">
+            <summary>
+                Identifying name for infrastructure and logging
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.IEventDatabase.Tracker">
+            <summary>
+                *If* a projection daemon has been started for this database, this
+                is the ShardStateTracker for the running daemon. This is useful in testing
+                scenarios
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.IEventDatabase.StoreDeadLetterEventAsync(System.Object,JasperFx.Events.Daemon.DeadLetterEvent,System.Threading.CancellationToken)">
+            <summary>
+            Store a dead letter event for a failed event in a projection or subscription
+            </summary>
+            <param name="storage">The parent event store</param>
+            <param name="deadLetterEvent"></param>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.IEventDatabase.ProjectionProgressFor(JasperFx.Events.Projections.ShardName,System.Threading.CancellationToken)">
+            <summary>
+                Check the current progress of a single projection or projection shard
+            </summary>
+            <param name="tenantId">
+                Specify the database containing this tenant id. If omitted, this method uses the default
+                database
+            </param>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.IEventDatabase.FindEventStoreFloorAtTimeAsync(System.DateTimeOffset,System.Threading.CancellationToken)">
+            <summary>
+            Find the position of the event store sequence just below the supplied timestamp. Will
+            return null if there are no events below that time threshold
+            </summary>
+            <param name="timestamp"></param>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.IEventDatabase.AllProjectionProgress(System.Threading.CancellationToken)">
+            <summary>
+                Check the current progress of all asynchronous projections
+            </summary>
+            <param name="token"></param>
+            <param name="tenantId">
+                Specify the database containing this tenant id. If omitted, this method uses the default
+                database
+            </param>
+            <returns></returns>
+        </member>
+        <member name="P:JasperFx.Events.IEventRegistry.TimeProvider">
+            <summary>
+            TimeProvider used for event timestamping metadata. Replace for controlling the timestamps
+            in testing
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.IEventRegistry.StreamIdentity">
+            <summary>
+                Configure whether event streams are identified with Guid or strings
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.IEventRegistry.AddEventType(System.Type)">
+            <summary>
+                Register an event type. This isn't strictly necessary for normal usage,
+                but can help with asynchronous projections where the daemon hasn't yet encountered
+                the event type
+            </summary>
+            <param name="eventType"></param>
+        </member>
+        <member name="T:JasperFx.Events.IAggregationSourceFactory`1">
+            <summary>
+            Implemented by event registries that can automatically derive aggregators
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.IAggregationSourceFactory`1.Build``1">
+            <summary>
+            Try to create an aggregate source for the type TDoc
+            </summary>
+            <typeparam name="TDoc">The aggregate type</typeparam>
+            <returns></returns>
+        </member>
+        <member name="P:JasperFx.Events.IEventStore.Identity">
+            <summary>
+            Identifies the event store within an application
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.IEventStore.OpenReadOnlyEventStore">
+            <summary>
+            Open a read-only event store session for querying
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.IEventStore.CompactStreamAsync(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Compact a stream by aggregating events into a snapshot.
+            Resolves aggregate type from stream state.
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.IEventStore.CompactStreamAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Compact a stream by aggregating events into a snapshot.
+            Resolves aggregate type from stream state.
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.IEventStore`2.TimeProvider">
+            <summary>
+            TimeProvider used for event timestamping metadata. Replace for controlling the timestamps
+            in testing
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.IEventStore`2.TeardownExistingProjectionStateAsync(JasperFx.Events.IEventDatabase,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Tear down all stored projection data and the projection progression
+            </summary>
+            <param name="database"></param>
+            <param name="subscriptionName"></param>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.IEventStore`2.DeleteProjectionProgressAsync(JasperFx.Events.IEventDatabase,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Delete *only* any persisted projection progress data
+            </summary>
+            <param name="database"></param>
+            <param name="subscriptionName"></param>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="T:JasperFx.Events.IReadOnlyEventStore">
+            <summary>
+            Read-only event store operations for querying streams and events.
+            Implemented by Marten and any future event store providers.
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.IReadOnlyEventStore.FetchStreamAsync(System.Guid,System.Int64,System.Nullable{System.DateTimeOffset},System.Int64,System.Threading.CancellationToken)">
+            <summary>
+            Fetch all events for a stream identified by Guid
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.IReadOnlyEventStore.FetchStreamAsync(System.String,System.Int64,System.Nullable{System.DateTimeOffset},System.Int64,System.Threading.CancellationToken)">
+            <summary>
+            Fetch all events for a stream identified by string key
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.IReadOnlyEventStore.FetchStreamStateAsync(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Fetch stream metadata by Guid
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.IReadOnlyEventStore.FetchStreamStateAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Fetch stream metadata by string key
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.IReadOnlyEventStore.QueryEventsAsync(JasperFx.Events.EventQuery,System.Threading.CancellationToken)">
+            <summary>
+            Query events across all streams with filtering and pagination
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.NaturalKeyBuilder`1">
+            <summary>
+            Fluent builder for configuring natural key event mappings on a projection.
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.NaturalKeyBuilder`1.SetBy``1(System.Func{``0,System.Object})">
+            <summary>
+            Register an event type that sets or changes the natural key value.
+            </summary>
+            <param name="extractor">Lambda to extract the natural key value from the event.</param>
+            <typeparam name="TEvent">The event type that carries the natural key value.</typeparam>
+        </member>
+        <member name="T:JasperFx.Events.NaturalKeyEventMapping">
+            <summary>
+            Defines the mapping from a specific event type to a natural key value extraction.
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.NaturalKeyDefinition">
+            <summary>
+            Metadata describing a natural key on an aggregate type. A natural key provides an
+            alternative lookup for event streams using a domain-meaningful strong-typed identifier.
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.NaturalKeyDefinition.OuterType">
+            <summary>
+            The outer type of the natural key (may be a strong-typed id wrapper).
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.NaturalKeyDefinition.InnerType">
+            <summary>
+            The inner/primitive type of the natural key (int, long, or string).
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.NaturalKeyDefinition.ValueTypeInfo">
+            <summary>
+            Value type info for wrapping/unwrapping strong-typed identifiers. Null if the key is a primitive.
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.NaturalKeyDefinition.EventMappings">
+            <summary>
+            Event-to-key mappings registered via SetBy or [NaturalKeySource].
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.NaturalKeyDefinition.Unwrap(System.Object)">
+            <summary>
+            Unwrap a natural key value to its inner primitive representation.
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.NaturalKeyDefinition.IsValid">
+            <summary>
+            Validates that the inner type is a supported natural key type.
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.Projections.AsyncOptions">
+            <summary>
+                Governs the advanced behavior of a projection shard running
+                in the projection daemon
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Projections.AsyncOptions.BatchSize">
+            <summary>
+                The maximum range of events fetched at one time
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Projections.AsyncOptions.MaximumHopperSize">
+            <summary>
+                The maximum number of events to be held in memory in preparation
+                for determining projection updates.
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Projections.AsyncOptions.StorageTypes">
+            <summary>
+                Optional list of stored document or feature types that this projection
+                writes. This is used to help build out schema objects if the
+                async daemon is started before the rest of the application.
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Projections.AsyncOptions.EnableDocumentTrackingByIdentity">
+            <summary>
+            Enable the identity map mechanics to reuse documents within the session by their identity
+            if a projection needs to make subsequent changes to the same document at one time. Default is no tracking
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Projections.AsyncOptions.CacheLimitPerTenant">
+            <summary>
+            If more than 0 (the default), this is the maximum number of aggregates
+            that will be cached in a 2nd level, most recently used cache during async
+            projection. Use this to potentially improve async projection throughput
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Projections.AsyncOptions.DeleteViewTypeOnTeardown``1">
+            <summary>
+                Add explicit teardown rule to delete all documents of type T
+                when this projection shard is rebuilt
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:JasperFx.Events.Projections.AsyncOptions.DeleteViewTypeOnTeardown(System.Type)">
+            <summary>
+                Add explicit teardown rule to delete all documents of type T
+                when this projection shard is rebuilt
+            </summary>
+            <param name="type"></param>
+        </member>
+        <member name="M:JasperFx.Events.Projections.AsyncOptions.DeleteDataInTableOnTeardown(System.String)">
+            <summary>
+                Add an explicit teardown rule to wipe data in the named table
+                when this projection shard is rebuilt
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="M:JasperFx.Events.Projections.AsyncOptions.SubscribeFromPresent(System.String)">
+            <summary>
+            Direct that this subscription or projection should only start from events that are appended
+            after the subscription is started
+            </summary>
+            <param name="databaseIdentifier">Optionally applies this rule to *only* the named database in the case of
+            using a multi-tenancy per multiple databases strategy</param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Projections.AsyncOptions.SubscribeFromTime(System.DateTimeOffset,System.String)">
+            <summary>
+            Direct that this subscription or projection should only start from events that have a timestamp
+            greater than the supplied eventTimestampFloor
+            </summary>
+            <param name="eventTimestampFloor">The floor time of the events where this subscription should be started</param>
+            <param name="databaseIdentifier">Optionally applies this rule to *only* the named database in the case of
+            using a multi-tenancy per multiple databases strategy</param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Projections.AsyncOptions.SubscribeFromSequence(System.Int64,System.String)">
+            <summary>
+            Direct that this subscription or projection should only start from events that have a sequence
+            greater than the supplied sequenceFloor
+            </summary>
+            <param name="sequenceFloor"></param>
+            <param name="databaseIdentifier">Optionally applies this rule to *only* the named database in the case of
+            using a multi-tenancy per multiple databases strategy</param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Projections.AsyncOptions.SubscribeAsInlineToAsync">
+             <summary>
+             Use this option to prevent having to rebuild a projection when you are
+             simply changing the projection lifecycle from "Inline" to "Async" but are
+             making no other changes that would force a rebuild
+            
+             Direct that this projection had previously been running with an "Inline"
+             lifecycle now run as "Async". This will cause the system to first check if there
+             is any previous async progress, and if not, start the projection from the highest
+             event sequence for the system.
+             </summary>
+             <returns></returns>
+        </member>
+        <member name="T:JasperFx.Events.Projections.ContainerScoped.ProjectionSourceWrapperBase`3">
+            <summary>
+            Scoped wrapper for IProjectionSource projections that are not aggregations
+            </summary>
+            <typeparam name="TSource"></typeparam>
+            <typeparam name="TOperations"></typeparam>
+            <typeparam name="TQuerySession"></typeparam>
+        </member>
+        <member name="T:JasperFx.Events.Projections.ContainerScoped.ScopedAggregationWrapper`5">
+            <summary>
+            IoC scoped wrapper for aggregation projections
+            </summary>
+            <typeparam name="TSource"></typeparam>
+            <typeparam name="TDoc"></typeparam>
+            <typeparam name="TId"></typeparam>
+            <typeparam name="TOperations"></typeparam>
+            <typeparam name="TQuerySession"></typeparam>
+        </member>
+        <member name="T:JasperFx.Events.Projections.ContainerScoped.ScopedProjectionSourceWrapper`3">
+            <summary>
+            Used to wrap IoC sourced IProjectionSource registrations that are not aggregations
+            </summary>
+            <typeparam name="TSource"></typeparam>
+            <typeparam name="TOperations"></typeparam>
+            <typeparam name="TQuerySession"></typeparam>
+        </member>
+        <member name="T:JasperFx.Events.Projections.ContainerScoped.ScopedProjectionWrapper`3">
+            <summary>
+                This is used to create projections that utilize scoped or transient
+                IoC services during execution
+            </summary>
+            <typeparam name="TProjection"></typeparam>
+            <typeparam name="TOperations"></typeparam>
+            <typeparam name="TQuerySession"></typeparam>
+        </member>
+        <member name="T:JasperFx.Events.Projections.EventFilterable">
+            <summary>
+            Base class for any projection or subscription type that needs to filter based on
+            event type or stream type
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Projections.EventFilterable.IncludedEventTypes">
+            <summary>
+                Optimize this projection within the Async Daemon by
+                limiting the event types processed through this projection
+                to include type "T". This is inclusive.
+                If this list is empty, the async daemon will fetch every possible
+                type of event at runtime
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:JasperFx.Events.Projections.EventFilterable.StreamType">
+            <summary>
+                Limit the events processed by this projection to only streams
+                marked with this stream type
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Projections.EventFilterable.IncludeType``1">
+            <summary>
+                Short hand syntax to tell the system that this projection takes in the event type T
+                This is not mandatory, but can be used to optimize the asynchronous projections
+                to create an "allow list" in the IncludedEventTypes collection
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:JasperFx.Events.Projections.EventFilterable.IncludeType(System.Type)">
+            <summary>
+                Short hand syntax to tell the system that this projection takes in the event type T
+                This is not mandatory, but can be used to optimize the asynchronous projections
+                to create an "allow list" in the IncludedEventTypes collection
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Projections.EventFilterable.FilterIncomingEventsOnStreamType(System.Type)">
+            <summary>
+                Limit the events processed by this projection to only streams
+                marked with the given streamType.
+                ONLY APPLIED TO ASYNCHRONOUS PROJECTIONS OR SUBSCRIPTIONS
+            </summary>
+            <param name="streamType"></param>
+        </member>
+        <member name="P:JasperFx.Events.Projections.EventFilterable.IncludeArchivedEvents">
+            <summary>
+            Should archived events be considered for this filtered set? Default is false.
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.Projections.EventRange">
+            <summary>
+                Used to specify then track a range of events by sequence number
+                within the asynchronous projections
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Projections.EventRange.CloneForExecutionLeaf(JasperFx.Events.Projections.ShardName)">
+            <summary>
+            When running a projection as a composite, you need to create clean
+            clones of the initial EventRange
+            </summary>
+            <param name="leafName">ShardName of the projection about to be executed with this range</param>
+            <returns></returns>
+        </member>
+        <member name="P:JasperFx.Events.Projections.EventRange.ShardName">
+            <summary>
+                Identifies the projection shard consuming this event range
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Projections.EventRange.SequenceFloor">
+            <summary>
+                The non-inclusive lower bound of the event sequence numbers
+                in this range
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Projections.EventRange.SequenceCeiling">
+            <summary>
+                The inclusive upper bound of the event sequence numbers in this range
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Projections.EventRange.Events">
+            <summary>
+                The actual events fetched for this range and the base filters of the projection
+                shard
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Projections.EventRange.Size">
+            <summary>
+                The actual number of events in this range
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Projections.EventRange.ActiveBatch">
+            <summary>
+            For composite projections, this would be the active projection batch
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Projections.IEventFilterable.IncludeType``1">
+            <summary>
+                Short hand syntax to tell the system that this projection takes in the event type T
+                This is not mandatory, but can be used to optimize the asynchronous projections
+                to create an "allow list" in the IncludedEventTypes collection
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:JasperFx.Events.Projections.IEventFilterable.IncludeType(System.Type)">
+            <summary>
+                Short hand syntax to tell the system that this projection takes in the event type T
+                This is not mandatory, but can be used to optimize the asynchronous projections
+                to create an "allow list" in the IncludedEventTypes collection
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Projections.IEventFilterable.FilterIncomingEventsOnStreamType(System.Type)">
+            <summary>
+                Limit the events processed by this projection to only streams
+                marked with the given streamType.
+                ONLY APPLIED TO ASYNCHRONOUS PROJECTIONS OR SUBSCRIPTIONS
+            </summary>
+            <param name="streamType"></param>
+        </member>
+        <member name="P:JasperFx.Events.Projections.IEventFilterable.IncludeArchivedEvents">
+            <summary>
+            Should archived events be considered for this filtered set? Default is false.
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.Projections.IInlineProjection`1">
+            <summary>
+            Interface for projections applied "Inline" as part of saving a transaction
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Projections.IInlineProjection`1.ApplyAsync(`0,System.Collections.Generic.IReadOnlyList{JasperFx.Events.StreamAction},System.Threading.CancellationToken)">
+            <summary>
+                Apply inline projections during asynchronous operations
+            </summary>
+            <param name="operations"></param>
+            <param name="streams"></param>
+            <param name="cancellation"></param>
+            <returns></returns>
+        </member>
+        <member name="T:JasperFx.Events.Projections.IJasperFxProjection`1">
+            <summary>
+            Main entry point for non-aggregation projections
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Projections.IJasperFxProjection`1.ApplyAsync(`0,System.Collections.Generic.IReadOnlyList{JasperFx.Events.IEvent},System.Threading.CancellationToken)">
+            <summary>
+            Apply operations 
+            </summary>
+            <param name="operations"></param>
+            <param name="events">A page of new events to apply through this projection</param>
+            <param name="cancellation"></param>
+            <returns></returns>
+        </member>
+        <member name="T:JasperFx.Events.Projections.InvalidProjectionException">
+            <summary>
+                Thrown when any configuration rules for an active projection are violated and the projection is invalid
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Projections.IProjectionBatch.RecordProgress(JasperFx.Events.Projections.EventRange)">
+            <summary>
+            Only necessary within composite projection execution
+            </summary>
+            <param name="range"></param>
+        </member>
+        <member name="T:JasperFx.Events.Projections.IProjectionSource`2">
+            <summary>
+            Interface for sources of projections
+            Sources of projections are used to define the behavior how a projection is built for a given projection type
+            Optimized for async usage
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.Projections.JasperFxEventProjectionBase`2">
+            <summary>
+            Base class for adhoc projections
+            </summary>
+            <typeparam name="TOperations"></typeparam>
+            <typeparam name="TQuerySession"></typeparam>
+        </member>
+        <member name="M:JasperFx.Events.Projections.JasperFxEventProjectionBase`2.ApplyAsync(`0,JasperFx.Events.IEvent,System.Threading.CancellationToken)">
+            <summary>
+            Override this for explicit projection logic
+            </summary>
+            <param name="operations"></param>
+            <param name="e"></param>
+            <param name="cancellation"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.Projections.ProjectionBase.AttachLogger(Microsoft.Extensions.Logging.ILoggerFactory)">
+            <summary>
+            Override this to customize how this projection will attach to
+            logging
+            </summary>
+            <param name="loggerFactory"></param>
+        </member>
+        <member name="P:JasperFx.Events.Projections.ProjectionBase.Name">
+            <summary>
+                Descriptive name for this projection in the async daemon. The default is the type name of the projection
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Projections.ProjectionBase.Version">
+            <summary>
+            Specify that this projection is a non 1 version of the original projection definition to opt
+            into any JasperFx Event Store's parallel blue/green deployment of this projection.
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Projections.ProjectionBase.Lifecycle">
+            <summary>
+                The projection lifecycle that governs when this projection is executed
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Projections.ProjectionBase.RegisterPublishedType(System.Type)">
+            <summary>
+                Just recording which document types are published by this projection
+            </summary>
+            <param name="publishedType"></param>
+        </member>
+        <member name="T:JasperFx.Events.Projections.ProjectionExceptions">
+            <summary>
+            Used by JasperFx.Events internals to decide whether an exception thrown by an
+            asynchronous projection or subscription is a transient error or an event application error
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Projections.ProjectionExceptions.RegisterTransientExceptionType``1">
+            <summary>
+            Register an exception type as a transient type
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:JasperFx.Events.Projections.ProjectionGraph`3.RebuildErrors">
+            <summary>
+            Async daemon error handling policies while running in a rebuild mode. The defaults
+            are to *not* skip any errors
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Projections.ProjectionGraph`3.Errors">
+            <summary>
+            Async daemon error handling polices while running continuously. The defaults
+            are to skip serialization errors, unknown events, and apply errors
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Projections.ProjectionGraph`3.Add(`0,JasperFx.Events.Projections.ProjectionLifecycle,System.String,System.Action{JasperFx.Events.Projections.AsyncOptions})">
+            <summary>
+            Register a projection to the event store configuration
+            </summary>
+            <param name="projection">Value values are Inline/Async, The default is Inline</param>
+            <param name="lifecycle"></param>
+            <param name="projectionName">
+                Overwrite the named identity of this projection. This is valuable if using the projection
+                asynchronously
+            </param>
+            <param name="asyncConfiguration">
+                Optional configuration including teardown instructions for the usage of this
+                projection within the async projection daempon
+            </param>
+        </member>
+        <member name="M:JasperFx.Events.Projections.ProjectionGraph`3.Register(JasperFx.Events.Projections.IProjectionSource{`1,`2},JasperFx.Events.Projections.ProjectionLifecycle,System.Action{JasperFx.Events.Projections.AsyncOptions})">
+            <summary>
+            Register a projection to the sytem's configuration
+            </summary>
+            <param name="projection">Value values are Inline/Async, The default is Inline</param>
+            <param name="lifecycle"></param>
+            <param name="projectionName">
+                Overwrite the named identity of this projection. This is valuable if using the projection
+                asynchronously
+            </param>
+            <param name="asyncConfiguration">
+                Optional configuration including teardown instructions for the usage of this
+                projection within the async projection daempon
+            </param>
+        </member>
+        <member name="M:JasperFx.Events.Projections.ProjectionGraph`3.Add(JasperFx.Events.Projections.IProjectionSource{`1,`2},JasperFx.Events.Projections.ProjectionLifecycle,System.Action{JasperFx.Events.Projections.AsyncOptions})">
+            <summary>
+            Add a projection that will be executed inline
+            </summary>
+            <param name="source">A projection or projection source object</param>
+            <param name="lifecycle">Optionally override the lifecycle of this projection. The default is Inline</param>
+            <param name="asyncConfiguration">Use it to define behaviour during projection rebuilds</param>
+        </member>
+        <member name="M:JasperFx.Events.Projections.ProjectionGraph`3.Add``1(JasperFx.Events.Projections.ProjectionLifecycle,System.Action{JasperFx.Events.Projections.AsyncOptions})">
+            <summary>
+            Register an aggregate projection that should be evaluated inline
+            </summary>
+            <typeparam name="TProjectionType">Projection type</typeparam>
+            <param name="lifecycle">Optionally override the ProjectionLifecycle</param>
+            <param name="asyncConfiguration">Use it to define behaviour during projection rebuilds</param>
+        </member>
+        <member name="M:JasperFx.Events.Projections.ProjectionGraph`3.registerSubscription(JasperFx.Events.Subscriptions.ISubscriptionSource{`1,`2})">
+            <summary>
+            Add a subscription to this event store
+            </summary>
+            <param name="subscription"></param>
+        </member>
+        <member name="M:JasperFx.Events.Projections.ProjectionGraph`3.DiscoverGeneratedEvolvers(System.Reflection.Assembly[])">
+            <summary>
+            Scan assemblies for GeneratedEvolverAttribute registrations and record
+            discovered aggregate types. This ensures that self-aggregating types with
+            source-generated evolvers are reported by AllAggregateTypes() and will
+            use the efficient generated evolver when aggregated at runtime.
+            </summary>
+        </member>
+        <member name="F:JasperFx.Events.Projections.ProjectionLifecycle.Inline">
+            <summary>
+                The projection will be updated in the same transaction as
+                the events being captured
+            </summary>
+        </member>
+        <member name="F:JasperFx.Events.Projections.ProjectionLifecycle.Async">
+            <summary>
+                The projection will only execute within the Async Daemon
+            </summary>
+        </member>
+        <member name="F:JasperFx.Events.Projections.ProjectionLifecycle.Live">
+            <summary>
+                The projection is only executed on demand
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.Projections.ProjectionVersionAttribute">
+            <summary>
+            Alternative to mark aggregation projections as being versioned to
+            opt into blue/green deployment support for projections
+            </summary>
+            <param name="version"></param>
+        </member>
+        <member name="M:JasperFx.Events.Projections.ProjectionVersionAttribute.#ctor(System.UInt32)">
+            <summary>
+            Alternative to mark aggregation projections as being versioned to
+            opt into blue/green deployment support for projections
+            </summary>
+            <param name="version"></param>
+        </member>
+        <member name="M:JasperFx.Events.Projections.ReflectionExtensions.IsOverridden(System.Type,System.String)">
+            <summary>
+            Is the named method overridden by a type outside of JasperFx.Events
+            </summary>
+            <param name="type"></param>
+            <param name="methodName"></param>
+            <returns></returns>
+        </member>
+        <member name="T:JasperFx.Events.Projections.ShardName">
+            <summary>
+                Identity for a single async shard
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Projections.ShardName.Name">
+            <summary>
+                Parent projection name
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Projections.ShardName.ShardKey">
+            <summary>
+                The identity of the shard within the projection. If there is only
+                one shard for a projection, this will be "All"
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Projections.ShardName.Identity">
+            <summary>
+                {ProjectionName}:{Key}. Single identity string that should be unique within this application
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.Projections.ShardState">
+            <summary>
+                Point in time state of a single projection shard or the high water mark
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Projections.ShardState.Timestamp">
+            <summary>
+                Time this state was recorded
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Projections.ShardState.ShardName">
+            <summary>
+                Name of the projection shard
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Projections.ShardState.Sequence">
+            <summary>
+                Furthest event sequence number processed by this projection shard
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Projections.ShardState.Exception">
+            <summary>
+                If not null, this is the exception that caused this state to be published
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Projections.ShardState.PreviousGoodMark">
+            <summary>
+            Marks the previous "good" high water mark when the ShardState is publishing a "skipping"
+            event
+            </summary>
+        </member>
+        <member name="F:JasperFx.Events.Projections.TenancyBehavior.AcrossTenants">
+            <summary>
+            This projection will process events for all tenants at one time,
+            with the user being responsible for tenanted operations
+            </summary>
+        </member>
+        <member name="F:JasperFx.Events.Projections.TenancyBehavior.ByTenant">
+            <summary>
+            This projection will process events for one tenant at a time
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.References`1">
+            <summary>
+            Stand in event used by projections to just denote a document or entity
+            that is referenced by an aggregate projection. Synthetic event.
+            </summary>
+            <param name="Entity"></param>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:JasperFx.Events.References`1.#ctor(`0)">
+            <summary>
+            Stand in event used by projections to just denote a document or entity
+            that is referenced by an aggregate projection. Synthetic event.
+            </summary>
+            <param name="Entity"></param>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:JasperFx.Events.References`1.Entity">
+            <summary></summary>
+        </member>
+        <member name="F:JasperFx.Events.StreamActionType.Start">
+            <summary>
+                This is a new stream. This action will be rejected
+                if a stream with the same identity exists in the database
+            </summary>
+        </member>
+        <member name="F:JasperFx.Events.StreamActionType.Append">
+            <summary>
+                Append these events to an existing stream. If the stream does not
+                already exist, it will be created with these events
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.StreamAction">
+            <summary>
+                Models a series of events to be appended to either a new or
+                existing stream
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.StreamAction.Id">
+            <summary>
+                Identity of the stream if using Guid's as the identity
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.StreamAction.Key">
+            <summary>
+                The identity of this stream if using strings as the stream
+                identity
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.StreamAction.ActionType">
+            <summary>
+                Is this action the start of a new stream or appending
+                to an existing stream?
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.StreamAction.AggregateType">
+            <summary>
+                If the stream was started as tagged to an aggregate type, that will
+                be reflected in this property. May be null
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.StreamAction.AggregateTypeName">
+            <summary>
+                JasperFx.Events's name for the aggregate type that will be persisted
+                to the streams table
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.StreamAction.TenantId">
+            <summary>
+                The Id of the current tenant
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.StreamAction.Events">
+            <summary>
+                The events involved in this action
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.StreamAction.ExpectedVersionOnServer">
+            <summary>
+                The expected *starting* version of the stream in the server. This is used
+                to facilitate optimistic concurrency checks
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.StreamAction.Version">
+            <summary>
+                The ending version of the stream for this action
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.StreamAction.AlwaysEnforceConsistency">
+            <summary>
+                If true, enforce an optimistic concurrency check on this stream even if no events
+                are appended. Used with FetchForWriting to ensure the stream version has not advanced
+                since it was fetched.
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.StreamAction.Timestamp">
+            <summary>
+                The recorded timestamp for these events
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.StreamAction.Created">
+            <summary>
+                When was the stream created
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.StreamAction.Start(JasperFx.Events.IEventRegistry,System.Guid,System.Object[])">
+            <summary>
+                Create a new StreamAction for starting a new stream
+            </summary>
+            <param name="streamId"></param>
+            <param name="events"></param>
+            <returns></returns>
+            <exception cref="T:JasperFx.Events.EmptyEventStreamException"></exception>
+        </member>
+        <member name="M:JasperFx.Events.StreamAction.Start(System.Guid,JasperFx.Events.IEvent[])">
+            <summary>
+                Create a new StreamAction for starting a new stream
+            </summary>
+            <param name="streamId"></param>
+            <param name="events"></param>
+            <returns></returns>
+            <exception cref="T:JasperFx.Events.EmptyEventStreamException"></exception>
+        </member>
+        <member name="M:JasperFx.Events.StreamAction.Start(JasperFx.Events.IEventRegistry,System.String,System.Object[])">
+            <summary>
+                Create a new StreamAction for starting a new stream
+            </summary>
+            <param name="streamKey"></param>
+            <param name="events"></param>
+            <returns></returns>
+            <exception cref="T:JasperFx.Events.EmptyEventStreamException"></exception>
+        </member>
+        <member name="M:JasperFx.Events.StreamAction.Start(System.String,JasperFx.Events.IEvent[])">
+            <summary>
+                Create a new StreamAction for starting a new stream
+            </summary>
+            <param name="streamKey"></param>
+            <param name="events"></param>
+            <returns></returns>
+            <exception cref="T:JasperFx.Events.EmptyEventStreamException"></exception>
+        </member>
+        <member name="M:JasperFx.Events.StreamAction.Append(JasperFx.Events.IEventRegistry,System.Guid,System.Object[])">
+            <summary>
+                Create a new StreamAction for appending to an existing stream
+            </summary>
+            <param name="streamId"></param>
+            <param name="events"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.StreamAction.Append(System.Guid,JasperFx.Events.IEvent[])">
+            <summary>
+                Create a new StreamAction for appending to an existing stream
+            </summary>
+            <param name="streamId"></param>
+            <param name="events"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.StreamAction.Append(JasperFx.Events.IEventRegistry,System.String,System.Object[])">
+            <summary>
+                Create a new StreamAction for appending to an existing stream
+            </summary>
+            <param name="streamKey"></param>
+            <param name="events"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.StreamAction.Append(System.String,JasperFx.Events.IEvent[])">
+            <summary>
+                Create a new StreamAction for appending to an existing stream
+            </summary>
+            <param name="streamKey"></param>
+            <param name="events"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.StreamAction.PrepareEvents(System.Int64,JasperFx.Events.IEventRegistry,System.Collections.Generic.Queue{System.Int64},JasperFx.IMetadataContext)">
+            <summary>
+                Applies versions, .Net type aliases, the reserved sequence numbers, timestamps, etc.
+                to get the events ready to be inserted into the mt_events table
+            </summary>
+            <param name="currentVersion"></param>
+            <param name="graph"></param>
+            <param name="sequences"></param>
+            <param name="session"></param>
+            <exception cref="T:JasperFx.Events.EventStreamUnexpectedMaxEventIdException"></exception>
+        </member>
+        <member name="M:JasperFx.Events.StreamAction.CreateAggregateIdentitySource``1">
+            <summary>
+            Build a Func that can resolve an identity from the StreamAction and even
+            handles the dastardly strong typed identifiers
+            </summary>
+            <typeparam name="TId"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.Events.StreamAction.FastForward">
+            <summary>
+            Used to clone the current StreamAction, but "fast forward" the expected
+            version on the service to the current version
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:JasperFx.Events.StreamIdentity">
+            <summary>
+                Specify the identity strategy for event streams
+            </summary>
+        </member>
+        <member name="F:JasperFx.Events.StreamIdentity.AsGuid">
+            <summary>
+                Streams should be identified by Guid
+            </summary>
+        </member>
+        <member name="F:JasperFx.Events.StreamIdentity.AsString">
+            <summary>
+                Streams should be identified by a user supplied string
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Subscriptions.ISubscriptionSource.Version">
+            <summary>
+            Specify that this projection is a non 1 version of the original projection definition to opt
+            into the event store's parallel blue/green deployment of this projection.
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Subscriptions.ISubscriptionSource.ImplementationType">
+            <summary>
+            The actual type that implements this subscription or projection
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.Subscriptions.ISubscriptionOptions">
+            <summary>
+            Configuration interface for subscriptions
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.Subscriptions.JasperFxSubscriptionBase`3">
+            <summary>
+            Base class for custom subscriptions for event data
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Subscriptions.JasperFxSubscriptionBase`3.Name">
+            <summary>
+            Descriptive name for progress tracking and rebuild/replays
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Subscriptions.JasperFxSubscriptionBase`3.Version">
+            <summary>
+            If this value is greater than 1, it will be treated as an all new subscription and will played from zero
+            when deployed
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Subscriptions.JasperFxSubscriptionBase`3.Options">
+            <summary>
+            Fine tune the behavior of this subscription at runtime
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.Tags.EventTagInference">
+            <summary>
+            Provides runtime inference of tags from event data properties.
+            When an event is appended via IEventBoundary without explicit tags,
+            this utility scans the event type's public properties for any that match
+            registered tag types and creates EventTag values from them.
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Tags.EventTagInference.InferTags(System.Object,System.Collections.Generic.IReadOnlyList{JasperFx.Events.Tags.ITagTypeRegistration})">
+            <summary>
+            Try to infer tags from the event data's public properties by matching
+            property types against registered tag types. Returns the inferred tags,
+            or an empty list if none could be inferred.
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.Tags.EventTagQueryCondition">
+            <summary>
+            Represents a single condition in a DCB tag query.
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Tags.EventTagQueryCondition.#ctor(System.Type,System.Type,System.Object)">
+            <summary>
+            Represents a single condition in a DCB tag query.
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.Tags.EventTagQuery">
+            <summary>
+            A specification for querying events by their tags, following the
+            Dynamic Consistency Boundary (DCB) pattern. Conditions are OR'd together.
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Tags.EventTagQuery.Conditions">
+            <summary>
+            The conditions in this query, combined with OR logic.
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Tags.EventTagQuery.Or``2(``1)">
+            <summary>
+            Add a condition: events of type TEvent tagged with the given tag value.
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Tags.EventTagQuery.Or``1(``0)">
+            <summary>
+            Add a condition: any event tagged with the given tag value (no event type filter).
+            Also sets the current tag context for subsequent AndEventsOfType calls.
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Tags.EventTagQuery.TagTypes">
+            <summary>
+            Get the distinct tag types referenced by this query.
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Tags.EventTagQuery.For``1(``0)">
+            <summary>
+            Start building a query for a specific tag value. Use AndEventsOfType to filter by event types.
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Tags.EventTagQuery.AndEventsOfType``1">
+            <summary>
+            Add event type conditions for the current tag. Each type becomes a separate Or condition
+            with the current tag value.
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Tags.EventTagQuery.AndEventsOfType``2">
+            <summary>
+            Add event type conditions for the current tag. Each type becomes a separate Or condition
+            with the current tag value.
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Tags.EventTagQuery.AndEventsOfType``3">
+            <summary>
+            Add event type conditions for the current tag. Each type becomes a separate Or condition
+            with the current tag value.
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Tags.EventTagQuery.AndEventsOfType``4">
+            <summary>
+            Add event type conditions for the current tag. Each type becomes a separate Or condition
+            with the current tag value.
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Tags.EventTagQuery.AndEventsOfType``5">
+            <summary>
+            Add event type conditions for the current tag. Each type becomes a separate Or condition
+            with the current tag value.
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Tags.EventTagQuery.AndEventsOfType``6">
+            <summary>
+            Add event type conditions for the current tag. Each type becomes a separate Or condition
+            with the current tag value.
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.Tags.ITagTypeRegistration">
+            <summary>
+            Non-generic interface for tag type registrations, used throughout the codebase
+            so consumers don't need to know the generic type parameters.
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Tags.ITagTypeRegistration.TagType">
+            <summary>
+            The strong-typed identifier type (e.g., typeof(StudentId))
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Tags.ITagTypeRegistration.SimpleType">
+            <summary>
+            The inner primitive type (e.g., typeof(string), typeof(Guid))
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Tags.ITagTypeRegistration.TableSuffix">
+            <summary>
+            Table suffix for the tag table (e.g., "student_id")
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Tags.ITagTypeRegistration.AggregateType">
+            <summary>
+            The associated aggregate type, if any. Inferred from document mapping
+            or set explicitly via ForAggregate.
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Tags.ITagTypeRegistration.ExtractValue(System.Object)">
+            <summary>
+            Extract the inner primitive value from a strong-typed identifier instance.
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Tags.ITagTypeRegistration.ForAggregate``1">
+            <summary>
+            Associate this tag type with a specific aggregate type.
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Tags.ITagTypeRegistration.ForAggregate(System.Type)">
+            <summary>
+            Associate this tag type with a specific aggregate type.
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.Tags.TagTypeRegistration">
+            <summary>
+            Static factory for creating <see cref="T:JasperFx.Events.Tags.ITagTypeRegistration"/> instances.
+            Builds the ValueTypeInfo first, validates the type, then creates the
+            properly closed generic TagTypeRegistration&lt;TTag, TInner&gt;.
+            </summary>
+        </member>
+        <member name="M:JasperFx.Events.Tags.TagTypeRegistration.Create``1(System.String)">
+            <summary>
+            Create a tag type registration for the given strong-typed identifier type.
+            </summary>
+        </member>
+        <member name="T:JasperFx.Events.Tags.TagTypeRegistration`2">
+            <summary>
+            Generic registration of a strong-typed identifier as an event tag type.
+            TTag is the outer strong-typed identifier (e.g., StudentId),
+            TInner is the wrapped primitive (e.g., string).
+            </summary>
+        </member>
+        <member name="P:JasperFx.Events.Tags.TagTypeRegistration`2.TagType">
+            <inheritdoc />
+        </member>
+        <member name="P:JasperFx.Events.Tags.TagTypeRegistration`2.SimpleType">
+            <inheritdoc />
+        </member>
+        <member name="P:JasperFx.Events.Tags.TagTypeRegistration`2.TableSuffix">
+            <inheritdoc />
+        </member>
+        <member name="P:JasperFx.Events.Tags.TagTypeRegistration`2.AggregateType">
+            <inheritdoc />
+        </member>
+        <member name="M:JasperFx.Events.Tags.TagTypeRegistration`2.ExtractValue(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:JasperFx.Events.Tags.TagTypeRegistration`2.ForAggregate``1">
+            <inheritdoc />
+        </member>
+        <member name="M:JasperFx.Events.Tags.TagTypeRegistration`2.ForAggregate(System.Type)">
+            <inheritdoc />
+        </member>
+        <member name="T:JasperFx.Events.Updated`1">
+            <summary>
+            Stand in event used by projections to just denote a document or entity
+            that was updated as part of an input to an aggregate projection. Synthetic event.
+            </summary>
+            <param name="Document"></param>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:JasperFx.Events.Updated`1.#ctor(System.String,`0,JasperFx.Events.Daemon.ActionType)">
+            <summary>
+            Stand in event used by projections to just denote a document or entity
+            that was updated as part of an input to an aggregate projection. Synthetic event.
+            </summary>
+            <param name="Document"></param>
+            <typeparam name="T"></typeparam>
+        </member>
+    </members>
+</doc>

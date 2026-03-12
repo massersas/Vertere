@@ -1,0 +1,228 @@
+<div class="min-h-screen bg-base-100 text-base-content font-body">
+  <div class="absolute inset-0 bg-grid bg-[length:22px_22px] opacity-10 pointer-events-none"></div>
+  <div class="relative w-full max-w-[1400px] mx-auto px-2 sm:px-4 py-8">
+    <header class="flex flex-wrap items-center justify-between gap-4 mb-10">
+      <div>
+        <p class="text-xs uppercase tracking-[0.3em] text-primary/70">SchedulerPDV</p>
+        <h1 class="font-display text-3xl sm:text-4xl font-bold">Malla de promotores</h1>
+        <p class="text-base-content/70 mt-2 max-w-2xl">
+          Carga el CSV initial y los parámetros del PDV para generar la malla, previsualizarla y descargarla.
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <label class="flex items-center gap-2 text-sm text-base-content/70">
+          <span>Light</span>
+          <input
+            type="checkbox"
+            class="toggle toggle-primary"
+            [checked]="theme === 'dark'"
+            (change)="toggleTheme()"
+          />
+          <span>Dark</span>
+        </label>
+        <button class="btn btn-primary" (click)="submitPreview()" [disabled]="loading()">Previsualizar</button>
+        <button class="btn btn-outline btn-primary" (click)="downloadCsv()" [disabled]="loading()">Descargar CSV</button>
+      </div>
+    </header>
+
+    <div class="grid lg:grid-cols-[320px_minmax(0,1fr)] gap-6 justify-center">
+      <section class="card bg-base-200/70 border border-base-300 shadow-glow">
+        <div class="card-body gap-5">
+          <h2 class="font-display text-xl">Parámetros del PDV</h2>
+
+          <div class="form-control">
+            <label class="label text-sm text-base-content/70">Nombre PDV</label>
+            <input class="input input-bordered bg-base-100" [(ngModel)]="pdvName" placeholder="La Casona" />
+          </div>
+
+          <div class="form-control">
+            <label class="label text-sm text-base-content/70">Código PDV</label>
+            <input class="input input-bordered bg-base-100" [(ngModel)]="pdvCode" placeholder="1825PP023" />
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="form-control">
+              <label class="label text-sm text-base-content/70">TRX promedio</label>
+              <input class="input input-bordered bg-base-100" [(ngModel)]="trxAverage" />
+            </div>
+            <div class="form-control">
+              <label class="label text-sm text-base-content/70">Promotores</label>
+              <input type="number" min="1" class="input input-bordered bg-base-100" [(ngModel)]="promoterCount" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="form-control">
+              <label class="label text-sm text-base-content/70">Min Delta</label>
+              <input class="input input-bordered bg-base-100" [(ngModel)]="minDelta" />
+            </div>
+            <div class="form-control">
+              <label class="label text-sm text-base-content/70">Max Delta</label>
+              <input class="input input-bordered bg-base-100" [(ngModel)]="maxDelta" />
+            </div>
+          </div>
+
+          <div>
+            <label class="label text-sm text-base-content/70">Días seleccionados</label>
+            <div class="flex flex-wrap gap-2">
+              <button
+                *ngFor="let day of dayOptions"
+                class="btn btn-sm"
+                [class.btn-primary]="isDaySelected(day.id)"
+                [class.btn-outline]="!isDaySelected(day.id)"
+                (click)="toggleDay(day.id)"
+              >
+                {{ day.label }}
+              </button>
+            </div>
+          </div>
+
+          <div class="form-control">
+            <label class="label text-sm text-base-content/70">CSV initial</label>
+            <div
+              class="rounded-xl border border-dashed p-4 text-center transition"
+              [class.border-brand-400]="dragActive()"
+              [class.bg-brand-500/10]="dragActive()"
+              (dragover)="onDragOver($event)"
+              (dragleave)="onDragLeave($event)"
+              (drop)="onFileDrop($event)"
+            >
+              <p class="text-sm text-base-content/70">Arrastra el archivo aquí o selecciónalo</p>
+              <input type="file" accept=".csv" class="file-input file-input-bordered bg-base-100 mt-3 w-full" (change)="onFileChange($event)" />
+              <p class="text-xs text-base-content/60 mt-2" *ngIf="fileName()">Archivo: {{ fileName() }}</p>
+            </div>
+          </div>
+
+          <div class="form-control">
+            <label class="label text-sm text-base-content/70">Nota</label>
+            <textarea class="textarea textarea-bordered bg-base-100" rows="3" [(ngModel)]="note"></textarea>
+          </div>
+
+          <div *ngIf="error()" class="alert alert-error text-sm">
+            {{ error() }}
+          </div>
+        </div>
+      </section>
+
+      <section class="space-y-6">
+        <div class="card bg-base-200/70 border border-base-300">
+          <div class="card-body">
+            <h2 class="font-display text-xl">Previsualización</h2>
+            <p class="text-base-content/60 text-sm">
+              {{ rows().length ? rows().length + ' filas generadas' : 'Carga el CSV para ver la tabla.' }}
+            </p>
+            <div *ngIf="loading()" class="mt-4">
+              <progress class="progress progress-primary w-full"></progress>
+            </div>
+            <div *ngIf="warningCount()" class="mt-4 space-y-3">
+              <div class="text-xs uppercase tracking-[0.25em] text-base-content/60">
+                Resumen de alerts
+              </div>
+              <div class="grid gap-3">
+                <div *ngFor="let bucket of warningSummary()" class="flex items-center gap-3">
+                  <div class="w-28 text-xs font-semibold">{{ bucket.label }}</div>
+                  <div class="flex-1">
+                    <div class="h-3 rounded-full bg-base-300 overflow-hidden">
+                      <div
+                        class="h-3 rounded-full"
+                        [class]="bucket.colorClass"
+                        [style.width.%]="(bucket.count / maxWarningCount()) * 100"
+                      ></div>
+                    </div>
+                  </div>
+                  <div class="w-12 text-right text-xs">{{ bucket.count }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid gap-4 sm:grid-cols-4">
+          <div class="stats bg-base-200/70 border border-base-300">
+            <div class="stat">
+              <div class="stat-title text-base-content/60">Filas</div>
+              <div class="stat-value">{{ rows().length }}</div>
+              <div class="stat-desc text-base-content/60">Horas procesadas</div>
+            </div>
+          </div>
+          <div class="stats bg-base-200/70 border border-base-300">
+            <div class="stat">
+              <div class="stat-title text-base-content/60">Días</div>
+              <div class="stat-value">{{ uniqueDays().length }}</div>
+              <div class="stat-desc text-base-content/60">Días con data</div>
+            </div>
+          </div>
+          <div class="stats bg-base-200/70 border border-base-300">
+            <div class="stat">
+              <div class="stat-title text-base-content/60">Max Req</div>
+              <div class="stat-value">{{ maxRequired() }}</div>
+              <div class="stat-desc text-base-content/60">Promotores máximos</div>
+            </div>
+          </div>
+          <div class="stats bg-base-200/70 border border-base-300">
+            <div class="stat">
+              <div class="stat-title text-base-content/60">Optimización</div>
+              <div class="stat-value">{{ optimization() }}%</div>
+              <div class="stat-desc text-base-content/60">Uso de capacidad</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3">
+          <div class="badge badge-outline">Warnings: {{ warningCount() }}</div>
+          <div class="join">
+            <button class="btn btn-sm join-item" [class.btn-primary]="dayFilter() === 0" (click)="dayFilter.set(0)">
+              Todos
+            </button>
+            <button
+              class="btn btn-sm join-item"
+              *ngFor="let day of uniqueDays()"
+              [class.btn-primary]="dayFilter() === day"
+              (click)="dayFilter.set(day)"
+            >
+              Día {{ day }}
+            </button>
+          </div>
+        </div>
+
+        <div class="card bg-base-200/70 border border-base-300 overflow-hidden">
+          <div class="card-body p-0">
+            <div class="overflow-x-auto overflow-y-auto max-h-[65vh]">
+              <table class="table table-zebra text-xs min-w-max">
+                <thead class="sticky top-0 bg-base-200/95 text-base-content/80">
+                  <tr>
+                    <th class="sticky left-0 bg-base-200/95 z-10">Día</th>
+                    <th class="sticky left-[52px] bg-base-200/95 z-10">Hora</th>
+                    <th>TRX</th>
+                    <th>Delta</th>
+                    <th>Comentario</th>
+                    <th>Req</th>
+                    <th *ngFor="let promoterId of promoterColumns()">P{{ promoterId }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let row of displayedRows()" [class]="loadClass(row)" [attr.title]="rowTooltip(row)">
+                    <td class="sticky left-0 bg-base-200/95 z-10">{{ row.dayNumber }}</td>
+                    <td class="sticky left-[52px] bg-base-200/95 z-10">{{ row.hour }}</td>
+                    <td>{{ row.trxValue }}</td>
+                    <td>{{ row.computedDelta }}</td>
+                    <td>{{ row.comment }}</td>
+                    <td>
+                      <div class="flex items-center gap-2">
+                        <span class="badge badge-outline text-xs">{{ row.requiredStaff }}</span>
+                        <span class="text-[10px] uppercase tracking-[0.2em]">{{ loadLabel(row) }}</span>
+                      </div>
+                    </td>
+                    <td *ngFor="let promoterId of promoterColumns()" class="text-center font-mono">
+                      <span *ngIf="isAssigned(row, promoterId)">X</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>

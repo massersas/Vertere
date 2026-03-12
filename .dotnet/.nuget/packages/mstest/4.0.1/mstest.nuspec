@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>MSTest</id>
+    <version>4.0.1</version>
+    <authors>Microsoft</authors>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <icon>Icon.png</icon>
+    <readme>PACKAGE.md</readme>
+    <projectUrl>https://github.com/microsoft/testfx</projectUrl>
+    <description>MSTest is Microsoft supported Test Framework.
+
+      This package is a meta package to simplify test projects. It includes MSTest.TestFramework and MSTest.TestAdapter.
+
+      Supported platforms:
+      - .NET 4.6.2+
+      - .NET 8.0+
+      - .NET 8.0 Windows.18362+ (WinUI)
+      - UWP 10.0.16299
+      - UWP 10.0.17763 with .NET 9+</description>
+    <copyright>© Microsoft Corporation. All rights reserved.</copyright>
+    <tags>MSTest TestFramework TestAdapter VisualStudio Unittest MSTestV2 Microsoft</tags>
+    <serviceable>true</serviceable>
+    <repository type="git" url="https://github.com/microsoft/testfx" commit="2eb19d535ed152853999db4feb491c7afc44cc6b" />
+    <dependencies>
+      <group targetFramework=".NETFramework4.6.2">
+        <dependency id="MSTest.TestAdapter" version="4.0.1" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Testing.Extensions.TrxReport" version="2.0.1" exclude="Build,Analyzers" />
+        <dependency id="MSTest.TestFramework" version="4.0.1" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.NET.Test.Sdk" version="18.0.0" include="All" />
+        <dependency id="Microsoft.Testing.Extensions.CodeCoverage" version="18.1.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net8.0">
+        <dependency id="MSTest.TestAdapter" version="4.0.1" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Testing.Extensions.TrxReport" version="2.0.1" exclude="Build,Analyzers" />
+        <dependency id="MSTest.TestFramework" version="4.0.1" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.NET.Test.Sdk" version="18.0.0" include="All" />
+        <dependency id="Microsoft.Testing.Extensions.CodeCoverage" version="18.1.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net9.0">
+        <dependency id="MSTest.TestAdapter" version="4.0.1" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Testing.Extensions.TrxReport" version="2.0.1" exclude="Build,Analyzers" />
+        <dependency id="MSTest.TestFramework" version="4.0.1" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.NET.Test.Sdk" version="18.0.0" include="All" />
+        <dependency id="Microsoft.Testing.Extensions.CodeCoverage" version="18.1.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="UAP10.0.16299">
+        <dependency id="MSTest.TestAdapter" version="4.0.1" exclude="Build,Analyzers" />
+        <dependency id="MSTest.TestFramework" version="4.0.1" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Testing.Extensions.CodeCoverage" version="18.1.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>

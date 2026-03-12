@@ -1,0 +1,309 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.Testing.Extensions.TrxReport</name>
+    </assembly>
+    <members>
+        <member name="M:System.Numerics.BitOperations.RotateRight(System.UInt32,System.Int32)">
+            <summary>
+            Rotates the specified value right by the specified number of bits.
+            Similar in behavior to the x86 instruction ROR.
+            </summary>
+            <param name="value">The value to rotate.</param>
+            <param name="offset">The number of bits to rotate by.
+            Any value outside the range [0..31] is treated as congruent mod 32.</param>
+            <returns>The rotated value.</returns>
+        </member>
+        <member name="T:System.IO.Hashing.XxHashShared">
+            <summary>Shared implementation of the XXH3 hash algorithm for 64-bit in XxHash3 and <see cref="T:TestFx.Hashing.XxHash128"/> version.</summary>
+        </member>
+        <member name="F:System.IO.Hashing.XxHashShared.DefaultSecret">
+            <summary>Gets the default secret for when no seed is provided.</summary>
+            <remarks>This is the same as a custom secret derived from a seed of 0.</remarks>
+        </member>
+        <member name="M:System.IO.Hashing.XxHashShared.Rrmxmx(System.UInt64,System.UInt32)">
+            <summary>This is a stronger avalanche, preferable when input has not been previously mixed.</summary>
+        </member>
+        <member name="M:System.IO.Hashing.XxHashShared.Multiply32To64(System.UInt32,System.UInt32)">
+            <summary>Calculates a 32-bit to 64-bit long multiply.</summary>
+        </member>
+        <member name="M:System.IO.Hashing.XxHashShared.Avalanche(System.UInt64)">
+            <summary>This is a fast avalanche stage, suitable when input bits are already partially mixed.</summary>
+        </member>
+        <member name="M:System.IO.Hashing.XxHashShared.Multiply64To128ThenFold(System.UInt64,System.UInt64)">
+            <summary>Calculates a 64-bit to 128-bit multiply, then XOR folds it.</summary>
+        </member>
+        <member name="M:System.IO.Hashing.XxHashShared.Accumulate(System.UInt64*,System.Byte*,System.Byte*,System.Int32,System.Boolean,System.Int32)">
+            <summary>Optimized version of looping over <see cref="M:System.IO.Hashing.XxHashShared.Accumulate512(System.UInt64*,System.Byte*,System.Byte*)"/>.</summary>
+        </member>
+        <member name="F:System.IO.Hashing.XxHashShared.State.Accumulators">
+            <summary>The accumulators. Length is <see cref="F:System.IO.Hashing.XxHashShared.AccumulatorCount"/>.</summary>
+        </member>
+        <member name="F:System.IO.Hashing.XxHashShared.State.Secret">
+            <summary>Used to store a custom secret generated from a seed. Length is <see cref="F:System.IO.Hashing.XxHashShared.SecretLengthBytes"/>.</summary>
+        </member>
+        <member name="F:System.IO.Hashing.XxHashShared.State.Buffer">
+            <summary>The internal buffer. Length is <see cref="F:System.IO.Hashing.XxHashShared.InternalBufferLengthBytes"/>.</summary>
+        </member>
+        <member name="F:System.IO.Hashing.XxHashShared.State.BufferedCount">
+            <summary>The amount of memory in <see cref="F:System.IO.Hashing.XxHashShared.State.Buffer"/>.</summary>
+        </member>
+        <member name="F:System.IO.Hashing.XxHashShared.State.StripesProcessedInCurrentBlock">
+            <summary>Number of stripes processed in the current block.</summary>
+        </member>
+        <member name="F:System.IO.Hashing.XxHashShared.State.TotalLength">
+            <summary>Total length hashed.</summary>
+        </member>
+        <member name="F:System.IO.Hashing.XxHashShared.State.Seed">
+            <summary>The seed employed (possibly 0).</summary>
+        </member>
+        <member name="M:System.Buffers.Binary.BinaryPrimitives.ReverseEndianness(System.UInt32)">
+            <summary>
+            Reverses a primitive value by performing an endianness swap of the specified <see cref="T:System.UInt32" /> value.
+            </summary>
+            <param name="value">The value to reverse.</param>
+            <returns>The reversed value.</returns>
+        </member>
+        <member name="M:System.Buffers.Binary.BinaryPrimitives.ReverseEndianness(System.UInt64)">
+            <summary>
+            Reverses a primitive value by performing an endianness swap of the specified <see cref="T:System.UInt64" /> value.
+            </summary>
+            <param name="value">The value to reverse.</param>
+            <returns>The reversed value.</returns>
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TrxReport.Abstractions.ToolTrxCompareFactory.Uid">
+            <inheritdoc />
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TrxReport.Abstractions.ToolTrxCompareFactory.Version">
+            <inheritdoc />
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TrxReport.Abstractions.ToolTrxCompareFactory.DisplayName">
+            <inheritdoc />
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TrxReport.Abstractions.ToolTrxCompareFactory.Description">
+            <inheritdoc />
+        </member>
+        <member name="M:Microsoft.Testing.Extensions.TrxReport.Abstractions.ToolTrxCompareFactory.IsEnabledAsync">
+            <inheritdoc />
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TrxReport.Abstractions.TrxReportGeneratorCommandLine.Uid">
+            <inheritdoc />
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TrxReport.Abstractions.TrxReportGeneratorCommandLine.Version">
+            <inheritdoc />
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TrxReport.Abstractions.TrxReportGeneratorCommandLine.DisplayName">
+            <inheritdoc />
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TrxReport.Abstractions.TrxReportGeneratorCommandLine.Description">
+            <inheritdoc />
+        </member>
+        <member name="M:Microsoft.Testing.Extensions.TrxReport.Abstractions.TrxReportGeneratorCommandLine.IsEnabledAsync">
+            <inheritdoc />
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TrxReport.Abstractions.TrxCompareToolCommandLine.Uid">
+            <inheritdoc />
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TrxReport.Abstractions.TrxCompareToolCommandLine.Version">
+            <inheritdoc />
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TrxReport.Abstractions.TrxCompareToolCommandLine.DisplayName">
+            <inheritdoc />
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TrxReport.Abstractions.TrxCompareToolCommandLine.Description">
+            <inheritdoc />
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TrxReport.Abstractions.TrxCompareToolCommandLine.ToolName">
+            <inheritdoc />
+        </member>
+        <member name="M:Microsoft.Testing.Extensions.TrxReport.Abstractions.TrxCompareToolCommandLine.IsEnabledAsync">
+            <inheritdoc />
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TrxReport.Abstractions.TrxCompareTool.Name">
+            <inheritdoc />
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TrxReport.Abstractions.TrxCompareTool.Uid">
+            <inheritdoc />
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TrxReport.Abstractions.TrxCompareTool.Version">
+            <inheritdoc />
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TrxReport.Abstractions.TrxCompareTool.DisplayName">
+            <inheritdoc />
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TrxReport.Abstractions.TrxCompareTool.Description">
+            <inheritdoc />
+        </member>
+        <member name="M:Microsoft.Testing.Extensions.TrxReport.Abstractions.TrxCompareTool.IsEnabledAsync">
+            <inheritdoc />
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TrxReport.Abstractions.TrxReportGenerator.Uid">
+            <inheritdoc />
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TrxReport.Abstractions.TrxReportGenerator.Version">
+            <inheritdoc />
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TrxReport.Abstractions.TrxReportGenerator.DisplayName">
+            <inheritdoc />
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TrxReport.Abstractions.TrxReportGenerator.Description">
+            <inheritdoc />
+        </member>
+        <member name="M:Microsoft.Testing.Extensions.TrxReport.Abstractions.TrxReportGenerator.IsEnabledAsync">
+            <inheritdoc />
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TrxReport.Abstractions.TrxTestApplicationLifecycleCallbacks.Version">
+            <inheritdoc />
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TrxReport.Abstractions.TrxTestApplicationLifecycleCallbacks.DisplayName">
+            <inheritdoc />
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TrxReport.Abstractions.TrxTestApplicationLifecycleCallbacks.Description">
+            <inheritdoc />
+        </member>
+        <member name="M:Microsoft.Testing.Extensions.TrxReport.Abstractions.TrxTestApplicationLifecycleCallbacks.IsEnabledAsync">
+            <inheritdoc />
+        </member>
+        <member name="T:Microsoft.Testing.Extensions.TrxReport.TestingPlatformBuilderHook">
+            <summary>
+            This class is used by Microsoft.Testing.Platform.MSBuild to hook into the Testing Platform Builder to add TrxReport support.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Testing.Extensions.TrxReport.TestingPlatformBuilderHook.AddExtensions(Microsoft.Testing.Platform.Builder.ITestApplicationBuilder,System.String[])">
+            <summary>
+            Adds TrxReport support to the Testing Platform Builder.
+            </summary>
+            <param name="testApplicationBuilder">The test application builder.</param>
+            <param name="_">The command line arguments.</param>
+        </member>
+        <member name="T:Microsoft.Testing.Extensions.TrxReportExtensions">
+            <summary>
+            Provides extension methods for adding TRX report generation to a test application.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Testing.Extensions.TrxReportExtensions.AddTrxReportProvider(Microsoft.Testing.Platform.Builder.ITestApplicationBuilder)">
+            <summary>
+            Adds TRX report generation to a test application.
+            </summary>
+            <param name="builder">The test application builder.</param>
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TestReports.Resources.ExtensionResources.InvalidTestApplicationBuilderType">
+            <summary>TRX report generator only works with builders of type 'Microsoft.Testing.Platform.Builder.TestApplicationBuilder'</summary>
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TestReports.Resources.ExtensionResources.TrxComparerToolBaselineFileOptionDescription">
+            <summary>The baseline TRX file</summary>
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TestReports.Resources.ExtensionResources.TrxComparerToolBothFilesMustBeSpecified">
+            <summary>'--{0}' and '--{1}' must both be specified</summary>
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TestReports.Resources.ExtensionResources.TrxComparerToolDescription">
+            <summary>This tool allows to compare and highlights differences between 2 TRX reports</summary>
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TestReports.Resources.ExtensionResources.TrxComparerToolDisplayName">
+            <summary>TRX comparer tool</summary>
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TestReports.Resources.ExtensionResources.TrxComparerToolOptionExpectsSingleArgument">
+            <summary>'--{0}' expects a single trx file path as argument</summary>
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TestReports.Resources.ExtensionResources.TrxComparerToolOtherFileOptionDescription">
+            <summary>The TRX file to compare with the baseline</summary>
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TestReports.Resources.ExtensionResources.TrxFileExistsAndWillBeOverwritten">
+            <summary>Warning: Trx file '{0}' already exists and will be overwritten.</summary>
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TestReports.Resources.ExtensionResources.TrxReportArtifactDescription">
+            <summary>Test session</summary>
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TestReports.Resources.ExtensionResources.TrxReportArtifactDisplayName">
+            <summary>TRX Report</summary>
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TestReports.Resources.ExtensionResources.TrxReportFileNameExtensionIsNotTrx">
+            <summary>'--report-trx-filename' file name argument must end with '.trx' (e.g. --report-trx-filename myreport.trx)</summary>
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TestReports.Resources.ExtensionResources.TrxReportFileNameOptionDescription">
+            <summary>The name of the generated TRX report</summary>
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TestReports.Resources.ExtensionResources.TrxReportFileNameRequiresTrxReport">
+            <summary>'--report-trx-filename' requires '--report-trx' to be enabled</summary>
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TestReports.Resources.ExtensionResources.TrxReportFileNameShouldNotContainPath">
+            <summary>file name argument must not contain path (e.g. --report-trx-filename myreport.trx)</summary>
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TestReports.Resources.ExtensionResources.TrxReportFrameworkDoesNotSupportTrxReportCapability">
+            <summary>The test framework '{0}' with UID '{1}' does not support the 'ITrxReportCapability' leading to missing or incomplete TRX reports</summary>
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TestReports.Resources.ExtensionResources.TrxReportGeneratorBeforeTestHostProcessStartAsyncNotCalled">
+            <summary>Method 'BeforeTestHostProcessStartAsync' must be called before 'OnTestHostProcessStartedAsync'</summary>
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TestReports.Resources.ExtensionResources.TrxReportGeneratorDescription">
+            <summary>Produce a TRX report for the current test session</summary>
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TestReports.Resources.ExtensionResources.TrxReportGeneratorDisplayName">
+            <summary>TRX report generator</summary>
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TestReports.Resources.ExtensionResources.TrxReportGeneratorMissingTrxNamedPipeEnvironmentVariable">
+            <summary>Required environment variable '{0}' is missing for TRX report generator</summary>
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TestReports.Resources.ExtensionResources.TrxReportIsNotValidForDiscovery">
+            <summary>'--report-trx' cannot be enabled when using '--list-tests'</summary>
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TestReports.Resources.ExtensionResources.TrxReportOptionDescription">
+            <summary>Enable generating TRX report</summary>
+        </member>
+        <member name="P:Microsoft.Testing.Extensions.TestReports.Resources.ExtensionResources.UnsupportedRequestTypeErrorMessage">
+            <summary>Requests of type '{0}' is not supported</summary>
+        </member>
+        <member name="T:TestFx.Hashing.XxHash128">
+            <summary>Provides an implementation of the XXH128 hash algorithm for generating a 128-bit hash.</summary>
+            <remarks>
+            For methods that persist the computed numerical hash value as bytes,
+            the value is written in the Big Endian byte order.
+            </remarks>
+        </member>
+        <member name="F:TestFx.Hashing.XxHash128.HashLengthInBytes">
+            <summary>XXH128 produces 16-byte hashes.</summary>
+        </member>
+        <member name="M:TestFx.Hashing.XxHash128.#ctor">
+            <summary>Initializes a new instance of the <see cref="T:TestFx.Hashing.XxHash128"/> class using the default seed value 0.</summary>
+        </member>
+        <member name="M:TestFx.Hashing.XxHash128.#ctor(System.Int64)">
+            <summary>Initializes a new instance of the <see cref="T:TestFx.Hashing.XxHash128"/> class using the specified seed.</summary>
+        </member>
+        <member name="M:TestFx.Hashing.XxHash128.#ctor(System.IO.Hashing.XxHashShared.State)">
+            <summary>Initializes a new instance of the <see cref="T:TestFx.Hashing.XxHash128"/> class using the state from another instance.</summary>
+        </member>
+        <member name="M:TestFx.Hashing.XxHash128.Hash(System.Byte[])">
+            <summary>Computes the XXH128 hash of the provided <paramref name="source"/> data.</summary>
+            <param name="source">The data to hash.</param>
+            <returns>The XXH128 128-bit hash code of the provided data.</returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="source"/> is null.</exception>
+        </member>
+        <member name="M:TestFx.Hashing.XxHash128.Hash(System.Byte[],System.Int64)">
+            <summary>Computes the XXH128 hash of the provided data using the provided seed.</summary>
+            <param name="source">The data to hash.</param>
+            <param name="seed">The seed value for this hash computation.</param>
+            <returns>The XXH128 128-bit hash code of the provided data.</returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="source"/> is null.</exception>
+        </member>
+        <member name="M:TestFx.Hashing.XxHash128.Hash(System.Byte[],System.Byte[],System.Int64)">
+            <summary>Computes the XXH128 hash of the provided <paramref name="source"/> data into the provided <paramref name="destination"/> using the optionally provided <paramref name="seed"/>.</summary>
+            <param name="source">The data to hash.</param>
+            <param name="destination">The buffer that receives the computed 128-bit hash code.</param>
+            <param name="seed">The seed value for this hash computation. The default is zero.</param>
+            <returns>The number of bytes written to <paramref name="destination"/>.</returns>
+            <exception cref="T:System.ArgumentException"><paramref name="destination"/> is shorter than <see cref="F:TestFx.Hashing.XxHash128.HashLengthInBytes"/> (16 bytes).</exception>
+        </member>
+        <member name="M:TestFx.Hashing.XxHash128.TryHash(System.Byte[],System.Byte[],System.Int32@,System.Int64)">
+            <summary>Attempts to compute the XXH128 hash of the provided <paramref name="source"/> data into the provided <paramref name="destination"/> using the optionally provided <paramref name="seed"/>.</summary>
+            <param name="source">The data to hash.</param>
+            <param name="destination">The buffer that receives the computed 128-bit hash code.</param>
+            <param name="bytesWritten">When this method returns, contains the number of bytes written to <paramref name="destination"/>.</param>
+            <param name="seed">The seed value for this hash computation. The default is zero.</param>
+            <returns><see langword="true"/> if <paramref name="destination"/> is long enough to receive the computed hash value (16 bytes); otherwise, <see langword="false"/>.</returns>
+        </member>
+        <member name="M:TestFx.Hashing.XxHash128.Append(System.Byte[])">
+            <summary>Appends the contents of <paramref name="source"/> to the data already processed for the current hash computation.</summary>
+            <param name="source">The data to process.</param>
+        </member>
+    </members>
+</doc>

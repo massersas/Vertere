@@ -1,0 +1,8 @@
+:host {
+  display: block;
+}
+
+table.table th,
+table.table td {
+  white-space: nowrap;
+}

@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>FastExpressionCompiler</id>
+    <version>5.3.0</version>
+    <title>FastExpressionCompiler</title>
+    <authors>Maksim Volkau</authors>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <icon>logo.png</icon>
+    <readme>readme.md</readme>
+    <projectUrl>https://github.com/dadhi/FastExpressionCompiler</projectUrl>
+    <iconUrl>https://github.com/dadhi/FastExpressionCompiler/blob/master/logo.png</iconUrl>
+    <description>FastExpressionCompiler 5. 10-40x times faster than Expression.Compile()</description>
+    <releaseNotes>## v5.3.0 Feature release
+
+- feat: [performance] Reuse the ILGenerator used by the nested lambda compilation 
+- feat: [performance] Reuse DynamicMethod if possible
+- feat: Add debug diagnostics to the nested lambdas
+- fix: System.ExecutionEngineException with nullables on repeated calls to ConcurrentDictionary
+
+**Full Changelog**: https://github.com/dadhi/FastExpressionCompiler/compare/v5.2.0...v5.3.0
+
+
+## v5.2.0 Feature release
+
+- feat: #466 Simplify creation of the updateable value that can be put into Closure with the Expression.ConstantRef
+- feat: #472 Interpreter to reduce the IL emitted by the Logical, Comparison, Arithmetics expressions, by calculating them during compile time and using the calculation result in IL
+- feat: Expose TestTools and FastExpressionCompiler.ILDecoder to enable testing and diagnostic in the consumer code
+
+
+## v5.1.1. Bug-fix release
+
+- fix: #461 InvalidProgramException when null checking type by ref
+- fix: #462 Optimize Equality comparison with null
+
+**Full Changelog**: https://github.com/dadhi/FastExpressionCompiler/compare/v5.1.0...v5.1.1
+
+
+## v5.1.0 Small feature release
+
+- add: #458 Add Support for TryFault
+- fix: #460 ArgumentException when converting from object to type with explicit operator
+
+**Full Changelog**: https://github.com/dadhi/FastExpressionCompiler/compare/v5.0.3...v5.1.0
+
+
+## v5.0.3 Bug-fix release
+
+- fix: #451 Operator implicit/explicit produces InvalidProgram
+- fix: #455 TypeAs should return null when it cannot cast to a nullable #455
+ 
+**Full Changelog**: https://github.com/dadhi/FastExpressionCompiler/compare/v5.0.2...v5.0.3
+
+
+## v5.0.2 Bug-fix release
+
+-fix: #449 MemberInit produces InvalidProgram
+
+**Full Changelog**: https://github.com/dadhi/FastExpressionCompiler/compare/v5.0.1...v5.0.2
+
+
+## v5.0.1 Bug-fix release
+
+- fix: #437 Shared variables with nested lambdas returning incorrect values
+- fix: #439 Support unused Field access in Block
+- fix: #440 Errors with simplified Switch cases
+- fix: #441 Fails to pass Constant as call parameter by-reference
+- fix: #442 TryCatch and the Goto outside problems
+- fix: #443 Nested Calls with Lambda Parameters Throwing NotSupportedExpressionException
+
+
+## v5.0.0 Major feature release
+
+- feat: #271 Add conversion from the System Expression to the Light Expression to allow hoisted system expression embedding in the larger light expression
+- feat: #432 Add explicit target for .NET 9
+- feat: #434 ToCSharpString should generate stable names for the unnamed variables, parameters and labels
+
+- fix: #262 Optimize OpCode.Ceq plus Branch into a single compare-and-branch
+- fix: #424 TryCatch expression as argument in Call expression produces invalid program
+- fix: #426 Directly passing a method result to another method by ref, fails with InvalidProgramException
+- fix: #427 CSharp output with more consistency, robustness and more understandable code
+- fix: #428 Expression.Switch without a default case incorrectly calls first case for unmatched values
+- fix: #430 TryCatch - Bad label content in ILGenerator</releaseNotes>
+    <copyright>Copyright © 2016-2025 Maksim Volkau</copyright>
+    <tags>Performance Expression ExpressionTree Compile DynamicMethod IL ILEmit DryIoc ExpressionToCodeLib</tags>
+    <repository type="git" url="https://github.com/dadhi/FastExpressionCompiler" branch="refs/heads/master" commit="38e93b913893c76a873b15093b9a2f7be9b883b1" />
+    <dependencies>
+      <group targetFramework=".NETFramework4.7.2" />
+      <group targetFramework="net6.0" />
+      <group targetFramework="net8.0" />
+      <group targetFramework="net9.0" />
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="System.Reflection.Emit.Lightweight" version="4.7.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard2.1" />
+    </dependencies>
+  </metadata>
+</package>

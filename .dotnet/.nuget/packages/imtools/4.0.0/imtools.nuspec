@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata minClientVersion="3.3.0">
+    <id>ImTools</id>
+    <version>4.0.0</version>
+    <authors>Maksim Volkau</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <projectUrl>https://github.com/dadhi/ImTools</projectUrl>
+    <description>Immutable persistent collections, algebraic sum-type aka descriminated union, Ref type and supportive extensions for performant functional programming in C#.
+        Split from the DryIoc: https://github.com/dadhi/DryIoc</description>
+    <releaseNotes>## v4.0.0 Major release
+
+### Breaking changes
+
+`ImMap&lt;V&gt;` type is replaced by `ImHashMap&lt;int, V&gt;`.
+The implementations of ImMap and ImHashMap are combined into one, reducing the code size, and using all performance optimizations from the both.
+This change will simplify further performance improvements, testing and bug-fixes. 
+
+I have tried to keep the API as similar as possible,
+but you may expect that some types and methods were renamed, or new overloads were added.
+
+### Performance and memory improvements
+
+- Fewer allocations (~10%), see the benchmarks in project readme
+- Keeping the performance almost the same
+
+### Closed issues
+
+- #41 Add a builder-like capability to the ImHashMap via BuildFromDifferent methods
+- #47 Add output of the ImHashMap as mermaid diagram, e.g. `ToMermaidString` method
+- #48 Merge the ImMap and ImHashMap implementations
+- #50 Optimize Enumerable for the PartitionedHashMap
+- #51 Reduce ImHashMap memory allocations, keeping the speed
+- #52 Add AddSureNotPresent methods to compensate for GetSurePresent methods</releaseNotes>
+    <copyright>Copyright © 2016-2022 Maksim Volkau</copyright>
+    <tags>FP Performance Simple Functional Immutable Persistent Map Avl 2-3Tree Self Balanced Tree Dictionary Thread-safe Atomic Ref Algebraic Discriminated Union SumType</tags>
+    <dependencies>
+      <group targetFramework=".NETFramework4.5" />
+      <group targetFramework=".NETStandard2.0" />
+    </dependencies>
+    <contentFiles>
+      <files include="cs/any/*.*" buildAction="Compile" />
+    </contentFiles>
+  </metadata>
+</package>

@@ -1,0 +1,31 @@
+# Build outputs
+Build/
+
+# .NET
+**/bin/
+**/obj/
+**/*.user
+**/*.suo
+**/*.userosscache
+**/*.sln.docstates
+.vs/
+
+# Node / Angular / Electron
+**/node_modules/
+**/dist/
+**/.angular/
+**/.vite/
+**/.turbo/
+**/coverage/
+**/out/
+
+# Logs / temp
+**/*.log
+**/*.tmp
+**/*.temp
+**/.DS_Store
+**/Thumbs.db
+
+# Electron builder
+**/win-unpacked/
+**/*.nsis.7z

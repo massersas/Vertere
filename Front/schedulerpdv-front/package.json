@@ -1,0 +1,75 @@
+{
+  "name": "schedulerpdv-front",
+  "version": "1.0.0",
+  "description": "SchedulerPDV desktop app for generating promoter schedules based on hourly TRX data.",
+  "author": "Jose Velaides",
+  "main": "electron/main.js",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "electron": "wait-on http://localhost:4200 && electron .",
+    "dev": "concurrently \"npm:start\" \"npm:electron\"",
+    "build": "ng build",
+    "dist": "ng build && electron-builder",
+    "dist:portable": "ng build && electron-builder --win portable",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test"
+  },
+  "private": true,
+  "packageManager": "npm@11.11.0",
+  "dependencies": {
+    "@angular/common": "^21.2.0",
+    "@angular/compiler": "^21.2.0",
+    "@angular/core": "^21.2.0",
+    "@angular/forms": "^21.2.0",
+    "@angular/platform-browser": "^21.2.0",
+    "@angular/router": "^21.2.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^21.2.2",
+    "@angular/cli": "^21.2.2",
+    "@angular/compiler-cli": "^21.2.0",
+    "@fontsource/archivo": "^5.2.8",
+    "@fontsource/nunito-sans": "^5.2.7",
+    "autoprefixer": "^10.4.27",
+    "concurrently": "^9.2.1",
+    "daisyui": "^4.12.10",
+    "electron": "^36.4.0",
+    "electron-builder": "^26.0.12",
+    "jsdom": "^28.0.0",
+    "postcss": "^8.5.8",
+    "prettier": "^3.8.1",
+    "tailwindcss": "^3.4.17",
+    "typescript": "~5.9.2",
+    "vitest": "^4.0.8",
+    "wait-on": "^8.0.4"
+  },
+  "build": {
+    "appId": "com.schedulerpdv.app",
+    "productName": "SchedulerPDV",
+    "icon": "assets/ico/vertere.png",
+    "directories": {
+      "output": "../../Build"
+    },
+    "files": [
+      "dist/**",
+      "electron/**"
+    ],
+    "asar": true,
+    "extraResources": [
+      {
+        "from": "../../Build/Backend",
+        "to": "Backend"
+      }
+    ],
+    "win": {
+      "icon": "assets/ico/vertere.png",
+      "target": [
+        "portable"
+      ],
+      "artifactName": "SchedulerPDV-Portable-${version}.exe"
+    }
+  }
+}

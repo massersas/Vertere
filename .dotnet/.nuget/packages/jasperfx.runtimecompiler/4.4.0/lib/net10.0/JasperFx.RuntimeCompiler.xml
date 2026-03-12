@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>JasperFx.RuntimeCompiler</name>
+    </assembly>
+    <members>
+        <member name="T:JasperFx.RuntimeCompiler.AssemblyGenerator">
+            <summary>
+            Use to compile C# code to in memory assemblies using the Roslyn compiler
+            </summary>
+        </member>
+        <member name="M:JasperFx.RuntimeCompiler.AssemblyGenerator.ReferenceAssembly(System.Reflection.Assembly)">
+            <summary>
+            Tells Roslyn to reference the given assembly and any of its dependencies
+            when compiling code
+            </summary>
+            <param name="assembly"></param>
+        </member>
+        <member name="M:JasperFx.RuntimeCompiler.AssemblyGenerator.ReferenceAssemblyContainingType``1">
+            <summary>
+            Reference the assembly containing the type "T"
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:JasperFx.RuntimeCompiler.AssemblyGenerator.Generate(System.Action{JasperFx.CodeGeneration.ISourceWriter})">
+            <summary>
+            Compile code built up by using an ISourceWriter to a new assembly in memory
+            </summary>
+            <param name="write"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JasperFx.RuntimeCompiler.AssemblyGenerator.Generate(System.String)">
+            <summary>
+            Compile the code passed into this method to a new assembly in memory
+            </summary>
+            <param name="code"></param>
+            <returns></returns>
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
+        <member name="M:JasperFx.RuntimeCompiler.CodeFileExtensions.InitializeSynchronously(JasperFx.CodeGeneration.ICodeFile,JasperFx.CodeGeneration.GenerationRules,JasperFx.CodeGeneration.ICodeFileCollection,System.IServiceProvider)">
+            <summary>
+            Initialize dynamic code compilation by either loading the expected type
+            from the supplied assembly or dynamically generating and compiling the code
+            on demand
+            </summary>
+            <param name="file"></param>
+            <param name="rules"></param>
+            <param name="parent"></param>
+            <param name="services"></param>
+            <exception cref="T:JasperFx.CodeGeneration.ExpectedTypeMissingException"></exception>
+        </member>
+        <member name="M:JasperFx.RuntimeCompiler.CodeFileExtensions.AssertAllGeneratedCodeCanCompile(Microsoft.Extensions.Hosting.IHost)">
+            <summary>
+                Validate all of the Wolverine configuration of this Wolverine application.
+                This checks that all of the known generated code elements are valid
+            </summary>
+            <param name="host"></param>
+        </member>
+        <member name="T:JasperFx.RuntimeCompiler.Scenarios.CodegenScenario">
+            <summary>
+                Helper class to quickly exercise and test out custom Frame classes
+            </summary>
+        </member>
+        <member name="M:JasperFx.RuntimeCompiler.Scenarios.CodegenScenario.ForBaseOf``1(System.Action{JasperFx.CodeGeneration.GeneratedType,JasperFx.CodeGeneration.GeneratedMethod},JasperFx.CodeGeneration.GenerationRules)">
+            <summary>
+                Generate a new method for the basic base class. The base class "TObject" should
+                only have a single declared method
+            </summary>
+            <param name="configuration"></param>
+            <param name="rules"></param>
+            <typeparam name="TObject"></typeparam>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

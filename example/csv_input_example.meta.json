@@ -1,0 +1,8 @@
+{
+  "pdvName": "La Casona",
+  "pdvCode": "1825PP023",
+  "trxAverage": 33.125,
+  "promoterCount": 10,
+  "selectedDays": [1, 2, 3, 4],
+  "note": "Actualiza selectedDays y el CSV con tus horas/valores reales."
+}

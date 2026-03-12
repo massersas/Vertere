@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>NewId</id>
+    <version>4.0.1</version>
+    <authors>Chris Patterson</authors>
+    <license type="expression">Apache-2.0</license>
+    <licenseUrl>https://licenses.nuget.org/Apache-2.0</licenseUrl>
+    <description>NewId is an ordered 128-bit unique identifier generator using the Flake algorithm.</description>
+    <copyright>Copyright 2007-2019 Chris Patterson</copyright>
+    <tags>MassTransit NewId</tags>
+    <repository type="git" url="https://github.com/phatboyg/NewId" commit="683e2c0ccb0253a675249a73deb84f631588ce15" />
+    <dependencies>
+      <group targetFramework="net6.0" />
+      <group targetFramework=".NETStandard2.0" />
+    </dependencies>
+  </metadata>
+</package>

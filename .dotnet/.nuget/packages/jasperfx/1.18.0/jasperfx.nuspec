@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>JasperFx</id>
+    <version>1.18.0</version>
+    <authors>Jeremy D. Miller,Jaedyn Tonee</authors>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <projectUrl>http://github.com/jasperfx/jasperfx</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/JasperFx/jasperfx/refs/heads/main/logo.jpg</iconUrl>
+    <description>Foundational helpers and command line support used by JasperFx and the Critter Stack projects</description>
+    <repository type="git" url="https://github.com/JasperFx/jasperfx" branch="refs/heads/main" commit="bf45c6f73fd4d7db2345cf1bedaa460301f65822" />
+    <dependencies>
+      <group targetFramework="net8.0">
+        <dependency id="FastExpressionCompiler" version="5.3.0" exclude="Build,Analyzers" />
+        <dependency id="ImTools" version="4.0.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Bcl.TimeProvider" version="8.0.1" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.DependencyInjection.Abstractions" version="8.0.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Hosting" version="8.0.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.ObjectPool" version="8.0.0" exclude="Build,Analyzers" />
+        <dependency id="Polly.Core" version="8.6.5" exclude="Build,Analyzers" />
+        <dependency id="Spectre.Console" version="0.53.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net9.0">
+        <dependency id="FastExpressionCompiler" version="5.3.0" exclude="Build,Analyzers" />
+        <dependency id="ImTools" version="4.0.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Bcl.TimeProvider" version="9.0.11" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.DependencyInjection.Abstractions" version="9.0.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Hosting" version="9.0.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.ObjectPool" version="9.0.0" exclude="Build,Analyzers" />
+        <dependency id="Polly.Core" version="8.6.5" exclude="Build,Analyzers" />
+        <dependency id="Spectre.Console" version="0.53.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net10.0">
+        <dependency id="FastExpressionCompiler" version="5.3.0" exclude="Build,Analyzers" />
+        <dependency id="ImTools" version="4.0.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Bcl.TimeProvider" version="10.0.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.DependencyInjection.Abstractions" version="10.0.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Hosting" version="10.0.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.ObjectPool" version="10.0.0" exclude="Build,Analyzers" />
+        <dependency id="Polly.Core" version="8.6.5" exclude="Build,Analyzers" />
+        <dependency id="Spectre.Console" version="0.53.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>

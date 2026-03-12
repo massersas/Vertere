@@ -1,0 +1,9 @@
+[build]
+  base = "Front/schedulerpdv-front"
+  command = "npm run build && node ./scripts/write-config.js"
+  publish = "Front/schedulerpdv-front/dist/schedulerpdv-front"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
