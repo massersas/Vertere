@@ -1,7 +1,7 @@
 [build]
   base = "Front/schedulerpdv-front"
   command = "npm run build && node ./scripts/write-config.js"
-  publish = "dist/schedulerpdv-front"
+  publish = "dist/schedulerpdv-front/browser"
 
 [[redirects]]
   from = "/*"
