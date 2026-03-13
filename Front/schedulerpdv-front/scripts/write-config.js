@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const backendUrl = process.env.BACKEND_URL || '';
-const outDir = path.join(__dirname, '..', 'dist', 'schedulerpdv-front');
+const outDir = path.join(__dirname, '..', 'dist', 'schedulerpdv-front', 'browser');
 const outPath = path.join(outDir, 'config.js');
 
 if (!fs.existsSync(outDir)) {
